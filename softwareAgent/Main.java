@@ -106,8 +106,8 @@ public class Main {
 			String os_version = System.getProperty("os.version");		// iv.
 			String nmap_version = command_results[2];			// v.
 
-			String all_info = device_name + '/' + interface_ip + '/'
-				+ interface_mac + '/' + os_version + '/' + nmap_version;
+			String all_info = device_name + '|' + interface_ip + '|'
+				+ interface_mac + '|' + os_version + '|' + nmap_version;
 			MessageDigest md = null;
 			try {
 				md = MessageDigest.getInstance("SHA-256");
@@ -120,7 +120,7 @@ public class Main {
 			//all_info_hash = String.format("%064x", new java.math.BigInteger(1, digest));
 			all_info_hash = "123abc";
 			
-			String register_request = all_info + '/' + all_info_hash;
+			String register_request = all_info + '|' + all_info_hash;
 			if(v){
 				System.out.println("Registration request to be sent:\n" + register_request);
 			}	
@@ -176,7 +176,7 @@ public class Main {
 			
 			if(am_exists){								// Get a block of nmap jobs 
 				Client c=Client.create();
-				WebResource resource=c.resource(am_url + "/nmapjobtosend?hash="+all_info_hash); 
+				WebResource resource=c.resource(am_url + "/nmapjobtosend?hash="+all_info_hash);
 				ClientResponse response = resource.accept("text/plain").get(ClientResponse.class);
 												// Include SA's hash in request
 				if (response.getStatus() != 200) {
@@ -189,18 +189,12 @@ public class Main {
 				String output = response.getEntity(String.class);		// Check manager's response
 				if(output.equals("[]")){
 					System.out.println("No nmapjobs returned");								
-						try {									// Wait for some time before asking for more jobs
-							Thread.sleep( job_request_interval*1000 );	
-						} catch (InterruptedException ex) {
-							System.err.println("Interrupted main thread while sleeping between job requests - " + ex.getMessage());
-							ex.printStackTrace();
-						}
-						continue;
+					job_lines = new String[0];	
 				}
 				else {								// Parse nmapjob list
 					output=output.replace("[","");
 					output=output.replace("]","");
-					System.out.println(output);
+					System.out.println(output);		////////!!!!!!
 					job_lines=output.split(", ");	
 				}
 			} else{
@@ -228,7 +222,7 @@ public class Main {
 				}
 
 				if (!job.hasXMLparam()) {
-					System.err.println("Oops, job #" + job.getId() + "does not contain the -oX parameter!");
+					System.err.println("Oops, job #" + job.getId() + " does not contain the -oX parameter!");
 					continue;
 				}
 
@@ -258,14 +252,14 @@ public class Main {
 				}
 			}
 			
-			/*if(am_exists){									// Wait for some time before asking for more jobs
+			if(am_exists){									// Wait for some time before asking for more jobs
 				try {									
 					Thread.sleep( job_request_interval*1000 );	
 				} catch (InterruptedException ex) {
 					System.err.println("Interrupted main thread while sleeping between job requests - " + ex.getMessage());
 					ex.printStackTrace();
 				}
-			} */
+			} 
 			
 			
 		}
