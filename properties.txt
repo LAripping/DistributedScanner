@@ -1,4 +1,0 @@
-Jobs File : /home/petrakos/Desktop/2/jobs.txt
-Pool Size : 5
-Lines per Read : 2
-DummyProperty : dontcheckme
