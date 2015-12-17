@@ -28,16 +28,15 @@ public class SoftwareAgentInstance {
 	@PUT
 	@Consumes(MediaType.TEXT_PLAIN)
 	public Response registerAgent(String register_request) {		
-		String[] rr=register_request.split("/");	// register_request String to be passed to gui
+		String[] rr=register_request.split("\\|");	// register_request String to be passed to gui
 		String hash = rr[5];
-		System.out.println(register_request);
 		//guielements.popup( hash )
 
 		//Boolean accepted = guielements.buttonValue()
 		Boolean accepted=true;
 
 		if(accepted){
-			Connection con=null;
+	/*		Connection con=null;
 			PreparedStatement stmt= null;
 			MyConnection c= new MyConnection();
 			con=c.getInstance();			// Insert SA in database  
@@ -68,7 +67,7 @@ public class SoftwareAgentInstance {
 					e.printStackTrace();
 				}
 			}
-
+	 		*/
 			return Response.ok(MediaType.TEXT_PLAIN).build();
 		}
 		else{							// If registration is rejected 

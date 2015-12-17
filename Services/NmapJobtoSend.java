@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.glassfish.grizzly.http.server.Request;
@@ -44,7 +45,7 @@ public class NmapJobtoSend {
 	 */
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public String getjob(@PathParam("hash") String sa_hash){
+	public String getjob(@QueryParam("hash") String sa_hash){
 		if(Main.v){
 			System.out.println("Received nmapjob request from agent " +sa_hash);
 		}
@@ -54,15 +55,21 @@ public class NmapJobtoSend {
 		PreparedStatement stmt= null;
 		MyConnection c= new MyConnection();
 		con=c.getInstance();
-		String sql="SELECT id,params,periodic,period FROM nmap_jobs WHERE SoftwareAgents_hash=?";
+		String sql="SELECT id,params,periodic,period FROM nmap_jobs WHERE SoftwareAgents_hash=?  AND assigned=?";
 		ResultSet rs = null;
 		Boolean found = false;
 		try {
 			stmt=con.prepareStatement( sql );
 			stmt.setString(1, sa_hash);
+			stmt.setBoolean(2, false); 		// Only send nmapjobs not yet assigned
 			rs = stmt.executeQuery();
 			while(rs.next()) {
-				job_lines.add(rs.toString());
+				Integer id=rs.getInt(1);
+				String params=rs.getString(2);
+				Boolean periodic=rs.getBoolean(3);
+				Integer period=rs.getInt(4);
+				
+				job_lines.add(id.toString() + ',' + params + ',' + periodic + ',' + period.toString());
 				found = true;
 			}
 		} catch (SQLException e) {
@@ -84,14 +91,12 @@ public class NmapJobtoSend {
 			c= new MyConnection();			// Updating sent nmapjobs' info
 			con=c.getInstance();
 	
-			Calendar calendar= Calendar.getInstance();
-			Timestamp ts= new Timestamp(calendar.getTime().getTime());
-			sql="UPDATE nmap_jobs SET assigned=?, insertion_time=? FROM nmap_jobs WHERE SoftwareAgents_hash=?";
+			sql="UPDATE nmap_jobs SET assigned=? WHERE SoftwareAgents_hash=?";
 			try {
+				con.setAutoCommit(false);
 				stmt=con.prepareStatement( sql );
 				stmt.setBoolean(1, true);
-				stmt.setTimestamp(2, ts);
-				stmt.setString(3, sa_hash);
+				stmt.setString(2, sa_hash);
 				stmt.executeUpdate();
 				con.commit();
 			} catch (SQLException e) {
@@ -120,7 +125,7 @@ public class NmapJobtoSend {
 	
 	
 	@POST
-	@Path("/nmapjobtosend/{id}")
+	@Path("/{id}")
 	@Consumes(MediaType.TEXT_PLAIN)
 	public void postedResults(@PathParam("id")int job_id, String result) {
 		MessageDigest md = null;
@@ -146,6 +151,7 @@ public class NmapJobtoSend {
 		
 		String sql="INSERT INTO results  VALUES(?,?)";
 		try {
+			con.setAutoCommit(false);
 			stmt=con.prepareStatement( sql );
 			stmt.setString(1, result_hash);
 			stmt.setString(2, result);
@@ -178,6 +184,7 @@ public class NmapJobtoSend {
 		
 		sql="INSERT INTO nmap_jobs_has_results  VALUES(?,?)";
 		try {
+			con.setAutoCommit(false);
 			stmt=con.prepareStatement( sql );
 			stmt.setInt(1, job_id);
 			stmt.setString(2, result_hash);

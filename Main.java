@@ -26,9 +26,9 @@ public class Main {
                 return Integer.parseInt(httpPort);
             } catch (NumberFormatException e) {
             }
-        }
+        } 
         return defaultPort;
-    }
+    }   
 
     private static URI getBaseURI() {
         return UriBuilder.fromUri("http://localhost/").port(getPort(9998)).build();
@@ -59,7 +59,7 @@ public class Main {
 	if(args.length!=0){								
 		try {											
 			config.load(new FileInputStream(args[0]));		// Configure app with user-parameters (if any) 
-			System.err.println("Property file loaded succesfully");
+			System.out.println("Property file loaded succesfully");
 		} catch (IOException e) {
 			System.err.println("Failed to load properties from given file - " + e.getMessage());
 			e.printStackTrace();
@@ -69,11 +69,8 @@ public class Main {
 	v = Boolean.parseBoolean( config.getProperty("Verbose") );
 	nmapjob_request_interval = Integer.parseInt( config.getProperty("NmapJob Request Interval") );
         
-        
         System.in.read();
         httpServer.stop();
-        
-        
         
     }    
 }
