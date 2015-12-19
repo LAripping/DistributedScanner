@@ -1,10 +1,7 @@
-package aggregatorManager.Services;
-
+package dsAM.aggregatorManager.services;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -13,11 +10,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-
-import org.glassfish.grizzly.http.server.Request;
-
-import aggregatorManager.Main;
-
+import dsAM.aggregatorManager.*;
+import dsAM.aggregatorManager.db.MyConnection;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -28,13 +22,13 @@ import java.sql.*;
  *
  * @author root
  */
-@Path("/nmapjobtosend")
-public class NmapJobtoSend {
+@Path("/nmapjobs")
+public class NmapJobResource {
 
 	/**
 	 * Creates a new instance of NmapJobtoSend
 	 */
-	public NmapJobtoSend() {
+	public NmapJobResource() {
 
 	}
 
@@ -85,7 +79,6 @@ public class NmapJobtoSend {
 			}
 		}
 		
-		
 	
 		if(found){
 			c= new MyConnection();			// Updating sent nmapjobs' info
@@ -121,7 +114,6 @@ public class NmapJobtoSend {
 
 		return job_lines.toString();
 	}
-	
 	
 	
 	@POST
