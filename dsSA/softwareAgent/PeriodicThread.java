@@ -1,10 +1,11 @@
-package softwareAgent;
+package dsSA.softwareAgent;
 
-import helpers.NmapJob;
-import helpers.InputStreamtoString;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.BlockingQueue;
+
+import dsSA.softwareAgent.helpers.InputStreamtoString;
+import dsSA.softwareAgent.helpers.NmapJob;
 
 
 public class PeriodicThread implements Runnable {
@@ -26,7 +27,7 @@ public class PeriodicThread implements Runnable {
 	public void run() {
 		int count = 0;
 		System.out.println("Periodic Thread with ID: " + Thread.currentThread().getId() + " took job # " + job.getId() );
-
+		
 		while (true) {									// Running job periodically
 			Process proc;
 			try {

@@ -1,9 +1,4 @@
-package softwareAgent;
-
-import helpers.InputStreamtoString;
-import helpers.NmapJob;
-import helpers.Readfile;
-import helpers.ShutdownHook;
+package dsSA.softwareAgent;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,6 +15,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+
+import dsSA.softwareAgent.helpers.*;
+import dsSA.softwareAgent.services.Register_request;
 
 
 /**
@@ -41,13 +39,13 @@ public class Main {
 
 		Properties defaults = new Properties();					// Set default behavior
 		defaults.setProperty("Verbose","true");
-		defaults.setProperty("AM exists","true");
-		defaults.setProperty("Jobs File", "jobs.txt");
-		defaults.setProperty("Lines per Read", "3");
-		defaults.setProperty("Pool Size", "3");
-		defaults.setProperty("NmapJob Request Interval", "10");
-		defaults.setProperty("Register Request Interval", "5");
-		defaults.setProperty("AM url", "http://localhost:9998");
+		defaults.setProperty("AMexists","true");
+		defaults.setProperty("JobsFile", "jobs.txt");
+		defaults.setProperty("LinesPerRead", "3");
+		defaults.setProperty("PoolSize", "3");
+		defaults.setProperty("NmapJobRequestInterval", "10");
+		defaults.setProperty("RegisterRequestInterval", "5");
+		defaults.setProperty("AMurl", "http://localhost:9998");
 		
 		
 		Properties config = new Properties(defaults);				// Configure app with default behavior
@@ -62,18 +60,18 @@ public class Main {
 		}											// Parsing properties
 												
 		boolean v = Boolean.parseBoolean( config.getProperty("Verbose") );
-		boolean am_exists = Boolean.parseBoolean( config.getProperty("AM exists") );
-		int pool_size = Integer.parseInt( config.getProperty("Pool Size") );
+		boolean am_exists = Boolean.parseBoolean( config.getProperty("AMexists") );
+		int pool_size = Integer.parseInt( config.getProperty("PoolSize") );
 		String jobs_file= 
-			(am_exists ? null : config.getProperty("Jobs File") );
+			(am_exists ? null : config.getProperty("JobsFile") );
 		String am_url= 
-			(am_exists ? config.getProperty("AM url") : null );
+			(am_exists ? config.getProperty("AMurl") : null );
 		int lines_per_read = 
-			(am_exists ? -1 : Integer.parseInt( config.getProperty("Lines per Read") ) );
+			(am_exists ? -1 : Integer.parseInt( config.getProperty("LinesPerRead") ) );
 		int job_request_interval = 
-			(am_exists ? Integer.parseInt( config.getProperty("NmapJob Request Interval") ) : -1);
+			(am_exists ? Integer.parseInt( config.getProperty("NmapJobRequestInterval") ) : -1);
 		int register_request_interval = 
-			(am_exists ? Integer.parseInt( config.getProperty("Register Request Interval") ) : -1);
+			(am_exists ? Integer.parseInt( config.getProperty("RegisterRequestInterval") ) : -1);
 		if(v){
 			System.out.println("Configuration used:");
 			config.list(System.out);
@@ -81,18 +79,28 @@ public class Main {
 		}
 		
 		
-		
+		StringBuilder sb=null;
 		Readfile rf = (am_exists ? null : new Readfile(jobs_file) );
 		if(am_exists){									// Gather registration info
-			InetAddress ip = InetAddress.getLocalHost();
-			NetworkInterface nif = NetworkInterface.getByInetAddress(ip);
-			StringBuilder sb = new StringBuilder(18);
-			//for (byte b : nif.getHardwareAddress()) {
-			//	if (sb.length() > 0) {
-			//		sb.append(':');
-				//}
-				//sb.append(String.format("%02x", b));
-			//}
+			NIFtester nifTester = new NIFtester();
+			NetworkInterface nif = nifTester.getInternetNIF();
+			InetAddress ip = nifTester.getIp();
+			
+			if (nif==null || ip==null){
+				System.out.println("Using loopback address...");
+				nif=null;
+				ip=InetAddress.getLocalHost();
+			}
+			else{
+				ip = nifTester.getIp();
+				sb = new StringBuilder(18);
+				for (byte b : nif.getHardwareAddress()) {
+					if (sb.length() > 0) {
+						sb.append(':');
+					}
+					sb.append(String.format("%02x", b));
+				}
+			}
 			Process nmap = Runtime.getRuntime().exec("nmap -V localhost");
 			InputStream stdin = nmap.getInputStream();
 			InputStreamtoString is2s = new InputStreamtoString();
@@ -101,8 +109,7 @@ public class Main {
 											// Registration info:
 			String device_name = ip.getHostName();				// i.
 			String interface_ip = ip.getHostAddress();			// ii.
-			String interface_mac = sb.toString();				// iii.
-			interface_mac= "apo";
+			String interface_mac = (nif==null ? "--NO-NIFF--" : sb.toString() );				// iii.
 			String os_version = System.getProperty("os.version");		// iv.
 			String nmap_version = command_results[2];			// v.
 
@@ -117,8 +124,7 @@ public class Main {
 			}
 			md.update(all_info.getBytes("UTF-8"));
 			byte[] digest = md.digest();
-			//all_info_hash = String.format("%064x", new java.math.BigInteger(1, digest));
-			all_info_hash = "123abc";
+			all_info_hash = String.format("%064x", new java.math.BigInteger(1, digest));
 			
 			String register_request = all_info + '|' + all_info_hash;
 			if(v){
@@ -126,22 +132,13 @@ public class Main {
 			}	
 			
 			do{									// Request registration
-				Client c=Client.create();
-				WebResource resource = c.resource(am_url + "/softwareagent");
-				ClientResponse response = resource.put(ClientResponse.class,register_request);
-				if (response.getStatus() != 200) {				// Except 200 - OK status code
+				Register_request reg_req= new Register_request(am_url,register_request);
+				if (reg_req.SendRegister()) {				// Except 200 - OK status code
 					if(v){
-						System.out.println("Registration request rejected (status code:" + response.getStatus() +" ), waiting to resend..." );
-					}
-		 			
-		 		}
-				else{
-					if(v){
-						System.out.println("Registration request accepted!");
 						break;
 					}
+		 			
 				}
-				
 				try {										// Wait for some time, then retry registering
 					Thread.sleep( register_request_interval*1000 );	
 				} catch (InterruptedException ex) {
@@ -154,13 +151,14 @@ public class Main {
 		BlockingQueue<NmapJob> jobQueue = new LinkedBlockingQueue<NmapJob>();
 		BlockingQueue<NmapJob> resultQueue = new LinkedBlockingQueue<NmapJob>();
 		ArrayList<Thread> threadHotel = new ArrayList<Thread>();
+		ArrayList<NmapJob> jobhotel = new ArrayList<NmapJob>();		// List used to keep the id of the thread assigned, to find when stop command arrives
 		ShutdownHook handler = new ShutdownHook(jobQueue, resultQueue, threadHotel);
 		handler.attach();									// Prepare for shutdown procedures
 
 		Thread tst = new Thread(new Sender(resultQueue));
 		tst.start();										// Start sender thread
 		threadHotel.add(tst);								
-													// Job-threads' indexes in threadHotel match  their id's
+													
 		Thread[] tot = new Thread[pool_size];
 		for (i = 0; i < pool_size; i++) {							// Allocate One-Time-Thread-Pool
 			tot[i] = new Thread(new OnetimeThread(jobQueue, resultQueue));
@@ -176,7 +174,7 @@ public class Main {
 			
 			if(am_exists){								// Get a block of nmap jobs 
 				Client c=Client.create();
-				WebResource resource=c.resource(am_url + "/nmapjobtosend?hash="+all_info_hash);
+				WebResource resource=c.resource(am_url + "/nmapjobs?hash="+all_info_hash);
 				ClientResponse response = resource.accept("text/plain").get(ClientResponse.class);
 												// Include SA's hash in request
 				if (response.getStatus() != 200) {
@@ -216,22 +214,35 @@ public class Main {
 				if(job_lines[i]==null) break;
 				
 				NmapJob job = new NmapJob(job_lines[i]); 
+				jobhotel.add(job);
+				
 				if( job.checkExitCommand() ){
 					System.err.println("Received exit command... Terminating");
 					System.exit(0);
 				}
 
 				if (!job.hasXMLparam()) {
-					System.err.println("Oops, job #" + job.getId() + " does not contain the -oX parameter!");
+					System.err.println("Oops, job #" + job.getThread_id() + " does not contain the -oX parameter!");
 					continue;
 				}
-
 				if (job.isPeriodic()) {
 					if( job.checkStopCommand() ){
-						System.err.println("Received stop command for periodic thread #" + job.getId() );
+						
+						for(NmapJob njob : jobhotel) {
+							if(job.getId()==njob.getId()){
+								job.setThread_id(njob.getThread_id());
+								break;
+							}
+						}
+						System.err.println("Received stop command for periodic thread #" + job.getThread_id() );
 						try {
-							threadHotel.get( job.getId() ).interrupt();
-							threadHotel.get( job.getId() ).join();
+							for (Thread thre : threadHotel) {
+								if(thre.getId()==job.getThread_id()){
+									thre.interrupt();
+									thre.join();
+									break;
+								}
+							}
 						} catch (InterruptedException ex) {
 							System.err.println("Periodic thread commanded to stop was interrupted while blocked!");
 							ex.printStackTrace();
@@ -241,6 +252,7 @@ public class Main {
 						Thread pj = new Thread(new PeriodicThread(job, resultQueue));
 						pj.start();
 						threadHotel.add(pj);
+						job.setThread_id(pj.getId());
 					}
 				} else {
 					try {
@@ -259,7 +271,7 @@ public class Main {
 					System.err.println("Interrupted main thread while sleeping between job requests - " + ex.getMessage());
 					ex.printStackTrace();
 				}
-			} 
+			}
 			
 			
 		}

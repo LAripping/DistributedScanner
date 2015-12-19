@@ -1,11 +1,11 @@
-package softwareAgent;
+package dsSA.softwareAgent;
 
-
-import helpers.NmapJob;
-import helpers.InputStreamtoString;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.BlockingQueue;
+
+import dsSA.softwareAgent.helpers.InputStreamtoString;
+import dsSA.softwareAgent.helpers.NmapJob;
 
 public class OnetimeThread implements Runnable {
 
@@ -26,10 +26,9 @@ public class OnetimeThread implements Runnable {
 	
 	public void run() {
 		System.out.println("Onetime Thread with ID: " + Thread.currentThread().getId() + " started");
-
+		
 		while (true) {
 			NmapJob job = null;
-
 			try {
 				job = jobQueue.take();						// Block here witing for next job_token if queue empty
 			} catch (InterruptedException e) {

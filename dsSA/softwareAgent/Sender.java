@@ -1,12 +1,12 @@
-package softwareAgent;
-
-import helpers.NmapJob;
+package dsSA.softwareAgent;
 
 import java.util.concurrent.BlockingQueue;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+
+import dsSA.softwareAgent.helpers.NmapJob;
 
 
 public class Sender implements Runnable {
@@ -20,8 +20,6 @@ public class Sender implements Runnable {
 	public Sender(BlockingQueue<NmapJob> rq) {
 		this.resultQueue = rq;
 	}
-
-
 
 	public void run() {
 
@@ -37,10 +35,10 @@ public class Sender implements Runnable {
 			}
 
 										// Print results in screen 	
-			System.out.println("Result from job #" + job.getId() + " retrieved: \n" + job.getResults());
+			//System.out.println("Result from job #" + job.getId() + " retrieved: \n" + job.getResults());
 			
 			Client c=Client.create();
-			WebResource resource = c.resource("http://localhost:9998/nmapjobtosend/" +job.getId());
+			WebResource resource = c.resource("http://localhost:9998/nmapjobs/" +job.getId());
 			resource.post(ClientResponse.class,job.getResults());
 		}
 	}

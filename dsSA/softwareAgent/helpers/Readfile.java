@@ -1,4 +1,4 @@
-package helpers;
+package dsSA.softwareAgent.helpers;
 
 import java.io.IOException;
 import java.io.BufferedReader;

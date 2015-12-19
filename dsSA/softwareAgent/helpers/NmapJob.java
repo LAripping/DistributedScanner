@@ -1,4 +1,4 @@
-package helpers;
+package dsSA.softwareAgent.helpers;
 
 public class NmapJob {
 
@@ -7,6 +7,7 @@ public class NmapJob {
 	private boolean periodic;
 	private int period;
 	private String results;
+	private long thread_id;
 
 	public int getId() {
 		return id;
@@ -47,6 +48,14 @@ public class NmapJob {
 	public void setResults(String results) {
 		this.results = results;
 	}
+	
+	public long getThread_id() {
+		return thread_id;
+	}
+
+	public void setThread_id(long thread_id) {
+		this.thread_id = thread_id;
+	}
 
 	/**
 	 * 
@@ -69,7 +78,7 @@ public class NmapJob {
 	public boolean hasXMLparam() {
 		String[] temp2 = params.split(" "); // Looking for the -oX option
 		for (String param : temp2) {
-			if (param.equals("-oX")) {
+			if (param.equals("-oX") || param.equals("Stop")) { // Except if it's a "stop" command from AM
 				return true;
 			}
 		}
@@ -77,10 +86,10 @@ public class NmapJob {
 	}
 
 	public boolean checkExitCommand() {
-		return (this.id == -1 && this.params.equals("exit(0)") && this.periodic && this.period == -1);
+		return (/*this.id == -1 && */this.params.equals("exit(0)") && this.periodic && this.period == -1);
 	}
 
 	public boolean checkStopCommand() {
-		return (this.params.equals("Stop") && this.periodic && this.period == -1);
+		return (this.params.equals("Stop") && this.periodic);
 	}
 }

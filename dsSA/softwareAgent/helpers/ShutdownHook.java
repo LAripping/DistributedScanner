@@ -1,4 +1,4 @@
-package helpers;
+package dsSA.softwareAgent.helpers;
 
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
