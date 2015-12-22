@@ -47,8 +47,10 @@ public class NmapJobDAO {
 			stmt.setTimestamp(4, currentTimestamp);
 			stmt.setString(5, sa_hash);
 			stmt.executeUpdate();
+			
 			con.commit();
 			System.out.println("Nmapjob added");
+			
 		} catch (SQLException e) {
 			try {
 				con.rollback();

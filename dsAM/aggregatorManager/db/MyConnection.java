@@ -11,14 +11,18 @@ public class MyConnection {
 	private static String DBuser;
 	private static String DBpass;
 	private static String DB_URL;
-
+	
 	
 	public static void setConnectionParameters(String db_user, String db_pass) {		
 		DBuser = db_user;
 		DBpass = db_pass;
 		DB_URL =  "jdbc:mysql://localhost/DSschema?user=" + DBuser + "&password=" + DBpass;
+		
 	}
 	
+	
+
+
 	public Connection getInstance(){
 		Connection con=null;
 		try {

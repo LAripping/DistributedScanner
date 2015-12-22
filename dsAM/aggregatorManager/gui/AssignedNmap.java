@@ -108,6 +108,9 @@ public class AssignedNmap extends JFrame {
 	
 	private void showresultsbtnActionPerformed(ActionEvent event) {
 		//new NmapResults().setVisible(true);
+		
+		//ResultDAO dao = new ;
+		// dao.showResults( From,Until, hash)
 	}
 	
 	private void deletebtnActionPerformed(ActionEvent event) {

@@ -30,7 +30,7 @@ public class UserDAO {
         char[] c1 = passwordField.getPassword();
         String password=String.valueOf(c1);
         Arrays.fill(c1 , '0');
-        String sql = "SELECT username , password FROM users";
+        String sql = "SELECT username , password  FROM users";
         try {
 			stmt=con.prepareStatement( sql );
 			rs = stmt.executeQuery();
