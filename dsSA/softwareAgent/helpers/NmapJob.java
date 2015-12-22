@@ -70,6 +70,14 @@ public class NmapJob {
 		this.period = Integer.parseInt(temp[3]);
 		//String job_token = temp[0].concat("," + params);
 	}
+	
+	
+	public NmapJob(NmapJob copy){
+		this.id = copy.id;
+		this.params = copy.params;
+		this.periodic = copy.periodic;
+		this.period = copy.period;
+	}
 
 	/**
 	 * 

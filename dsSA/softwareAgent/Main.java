@@ -9,14 +9,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-
 import dsSA.softwareAgent.helpers.*;
+import dsSA.softwareAgent.services.NmapJob_request;
 import dsSA.softwareAgent.services.Register_request;
 
 
@@ -124,7 +122,11 @@ public class Main {
 			}
 			md.update(all_info.getBytes("UTF-8"));
 			byte[] digest = md.digest();
-			all_info_hash = String.format("%064x", new java.math.BigInteger(1, digest));
+			byte[] random_bytes = new byte[ digest.length ];			// Add a random number to ensure different SAs from same PC 
+			new Random().nextBytes(random_bytes);
+			java.math.BigInteger hash_int = new java.math.BigInteger(1, digest);
+			java.math.BigInteger random_int = new java.math.BigInteger(1, random_bytes);
+			all_info_hash = String.format("%064x", hash_int.add(random_int));
 			
 			String register_request = all_info + '|' + all_info_hash;
 			if(v){
@@ -133,11 +135,10 @@ public class Main {
 			
 			do{									// Request registration
 				Register_request reg_req= new Register_request(am_url,register_request);
-				if (reg_req.SendRegister()) {				// Except 200 - OK status code
+				if (reg_req.SendRegister()) {			
 					if(v){
 						break;
 					}
-		 			
 				}
 				try {										// Wait for some time, then retry registering
 					Thread.sleep( register_request_interval*1000 );	
@@ -171,30 +172,9 @@ public class Main {
 		while(true){									// Keep getting job-blocks untill the "break"
 			String[] job_lines = null;						
 			
-			
 			if(am_exists){								// Get a block of nmap jobs 
-				Client c=Client.create();
-				WebResource resource=c.resource(am_url + "/nmapjobs?hash="+all_info_hash);
-				ClientResponse response = resource.accept("text/plain").get(ClientResponse.class);
-												// Include SA's hash in request
-				if (response.getStatus() != 200) {
-					if(v){
-						throw new RuntimeException("Failed : HTTP error code : "+ response.getStatus());
-					}	
-							
-				}
-				
-				String output = response.getEntity(String.class);		// Check manager's response
-				if(output.equals("[]")){
-					System.out.println("No nmapjobs returned");								
-					job_lines = new String[0];	
-				}
-				else {								// Parse nmapjob list
-					output=output.replace("[","");
-					output=output.replace("]","");
-					System.out.println(output);		////////!!!!!!
-					job_lines=output.split(", ");	
-				}
+				NmapJob_request job_req = new NmapJob_request(am_url,all_info_hash);
+				job_lines=job_req.SendRequest();
 			} else{
 				if(rem_lines <= 0){						// Read nmapjobs from file
 					if( !am_exists) rf.closeJobFile();
@@ -272,8 +252,7 @@ public class Main {
 					ex.printStackTrace();
 				}
 			}
-			
-			
+				
 		}
 	}
 }

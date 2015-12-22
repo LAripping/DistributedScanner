@@ -1,12 +1,8 @@
 package dsSA.softwareAgent;
 
 import java.util.concurrent.BlockingQueue;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-
 import dsSA.softwareAgent.helpers.NmapJob;
+import dsSA.softwareAgent.services.NmapJob_result;
 
 
 public class Sender implements Runnable {
@@ -33,13 +29,11 @@ public class Sender implements Runnable {
 				System.err.println("Interrupted wait to take result from queue, in sender thread");
 				return;
 			}
-
 										// Print results in screen 	
 			//System.out.println("Result from job #" + job.getId() + " retrieved: \n" + job.getResults());
 			
-			Client c=Client.create();
-			WebResource resource = c.resource("http://localhost:9998/nmapjobs/" +job.getId());
-			resource.post(ClientResponse.class,job.getResults());
+			NmapJob_result job_res = new NmapJob_result(job.getResults(),job.getId());
+			job_res.SendResult();
 		}
 	}
 }

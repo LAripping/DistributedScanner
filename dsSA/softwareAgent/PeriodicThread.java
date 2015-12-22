@@ -29,6 +29,11 @@ public class PeriodicThread implements Runnable {
 		System.out.println("Periodic Thread with ID: " + Thread.currentThread().getId() + " took job # " + job.getId() );
 		
 		while (true) {									// Running job periodically
+			if(count!=0) {
+				NmapJob new_res = new NmapJob(job);
+				job = new_res;
+			}
+			
 			Process proc;
 			try {
 				proc = Runtime.getRuntime().exec("nmap " + job.getParams());
