@@ -7,7 +7,10 @@ import java.util.concurrent.BlockingQueue;
 import dsSA.softwareAgent.helpers.InputStreamtoString;
 import dsSA.softwareAgent.helpers.NmapJob;
 
-
+/**
+ *
+ * @author root
+ */
 public class PeriodicThread implements Runnable {
 
 	private NmapJob job;
@@ -15,7 +18,7 @@ public class PeriodicThread implements Runnable {
 
 	/**
 	 *
-	 * @param job The Nmap command object the thread will periodically execute
+	 * @param job The NmapJob the thread will periodically execute
 	 * @param resultQueue The shared queue object where completed jobs -along with their results- are being put
 	 */
 	public PeriodicThread(NmapJob job, BlockingQueue<NmapJob> resultQueue) {
@@ -26,7 +29,9 @@ public class PeriodicThread implements Runnable {
 
 	public void run() {
 		int count = 0;
-		System.out.println("Periodic Thread with ID: " + Thread.currentThread().getId() + " took job # " + job.getId() );
+		if(Main.v){
+			System.out.println("Periodic Thread with ID: " + Thread.currentThread().getId() + " took job # " + job.getId() );
+		}
 		
 		while (true) {									// Running job periodically
 			if(count!=0) {
@@ -38,7 +43,9 @@ public class PeriodicThread implements Runnable {
 			try {
 				proc = Runtime.getRuntime().exec("nmap " + job.getParams());
 				count++;
-				System.out.println("Periodic Thread with ID: " + Thread.currentThread().getId() + " just ran job #" + job.getId() + ". This is loop #" + count);
+				if(Main.v){
+					System.out.println("Periodic Thread with ID: " + Thread.currentThread().getId() + " just ran job #" + job.getId() + ". This is loop #" + count);
+				}
 
 				InputStream stdin = proc.getInputStream();
 				InputStreamtoString is2s = new InputStreamtoString();

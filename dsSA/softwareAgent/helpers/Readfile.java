@@ -19,33 +19,27 @@ public class Readfile {
 
 	/**
 	 * 
-	 * @param jobs_file
-	 *            The filename to read nmap jobs from
-	 * @throws java.io.IOException
-	 *             If an error occurs in oppening jobs file
+	 * @param jobs_file The filename to read nmap jobs from
 	 */
 	public Readfile(String jobs_file) {
 		this.cs = Charset.forName("UTF-8");
 		Path jobs_path = Paths.get(jobs_file);
 		try {
-			this.jobs_reader = newBufferedReader(jobs_path, cs); // Calculate
-																	// and store
-																	// total
-																	// lines in
-																	// dedicated
-																	// field
+			this.jobs_reader = newBufferedReader(jobs_path, cs); 
+								// Calculate and store total lines in dedicated field
 
 			while (this.jobs_reader.readLine() != null) {
 				this.total_job_lines++;
 			}
-			this.closeJobFile(); // Close and reopen Job File to reset
-									// filepointer
+			this.closeJobFile();		// Close and reopen Job File to reset filepointer
+								
 			this.jobs_reader = newBufferedReader(jobs_path, cs);
 		} catch (IOException e) {
 			System.err.println("Failed to open Job File - " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
+
 
 	public void closeJobFile() {
 		try {
@@ -59,9 +53,7 @@ public class Readfile {
 
 	/**
 	 * 
-	 * @param lines_per_read
-	 *            The number of lines to read from the Jobs File in a single
-	 *            operation
+	 * @param lines_per_read The number of lines to read from the Jobs File in a single operation
 	 * @throws IOException
 	 * @return Array of lines read as strings
 	 */
@@ -74,6 +66,10 @@ public class Readfile {
 		return job_lines;
 	}
 
+	/**
+	 *
+	 * @return The total number of lines the Job File contains
+	 */
 	public int getTotalJobLines() {
 		return total_job_lines;
 	}

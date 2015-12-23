@@ -2,14 +2,8 @@ package dsSA.softwareAgent;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -24,27 +18,21 @@ import dsSA.softwareAgent.services.Register_request;
  */
 public class Main {
 
+	public static Boolean v;
+	
 	/**		
 	 *
 	 * @param args Command line arguments. Only the path to the property file is
-	 * needed. If not provided default properties are used. See README for details 
+	 * needed. If not provided default properties are used.
 	 *
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
 		int i;
 		String all_info_hash = null;
-
-		Properties defaults = new Properties();					// Set default behavior
-		defaults.setProperty("Verbose","true");
-		defaults.setProperty("AMexists","true");
-		defaults.setProperty("JobsFile", "jobs.txt");
-		defaults.setProperty("LinesPerRead", "3");
-		defaults.setProperty("PoolSize", "3");
-		defaults.setProperty("NmapJobRequestInterval", "10");
-		defaults.setProperty("RegisterRequestInterval", "5");
-		defaults.setProperty("AMurl", "http://localhost:9998");
-		
+													// Load default properties
+		Properties defaults = new Properties();
+		defaults.load(new FileInputStream("default_saprop.conf") );	
 		
 		Properties config = new Properties(defaults);				// Configure app with default behavior
 		if(args.length!=0){								
@@ -57,7 +45,7 @@ public class Main {
 			}
 		}											// Parsing properties
 												
-		boolean v = Boolean.parseBoolean( config.getProperty("Verbose") );
+		v = Boolean.parseBoolean( config.getProperty("Verbose") );
 		boolean am_exists = Boolean.parseBoolean( config.getProperty("AMexists") );
 		int pool_size = Integer.parseInt( config.getProperty("PoolSize") );
 		String jobs_file= 
@@ -77,70 +65,17 @@ public class Main {
 		}
 		
 		
-		StringBuilder sb=null;
+		
 		Readfile rf = (am_exists ? null : new Readfile(jobs_file) );
 		if(am_exists){									// Gather registration info
-			NIFtester nifTester = new NIFtester();
-			NetworkInterface nif = nifTester.getInternetNIF();
-			InetAddress ip = nifTester.getIp();
+			Register_request reg_req= new Register_request(am_url);
 			
-			if (nif==null || ip==null){
-				System.out.println("Using loopback address...");
-				nif=null;
-				ip=InetAddress.getLocalHost();
-			}
-			else{
-				ip = nifTester.getIp();
-				sb = new StringBuilder(18);
-				for (byte b : nif.getHardwareAddress()) {
-					if (sb.length() > 0) {
-						sb.append(':');
-					}
-					sb.append(String.format("%02x", b));
-				}
-			}
-			Process nmap = Runtime.getRuntime().exec("nmap -V localhost");
-			InputStream stdin = nmap.getInputStream();
-			InputStreamtoString is2s = new InputStreamtoString();
-			String[] command_results = is2s.getStringFromInput(stdin).split(" ", 4);
-			
-											// Registration info:
-			String device_name = ip.getHostName();				// i.
-			String interface_ip = ip.getHostAddress();			// ii.
-			String interface_mac = (nif==null ? "--NO-NIFF--" : sb.toString() );				// iii.
-			String os_version = System.getProperty("os.version");		// iv.
-			String nmap_version = command_results[2];			// v.
-
-			String all_info = device_name + '|' + interface_ip + '|'
-				+ interface_mac + '|' + os_version + '|' + nmap_version;
-			MessageDigest md = null;
-			try {
-				md = MessageDigest.getInstance("SHA-256");
-			} catch (NoSuchAlgorithmException e) {
-				System.err.println("Failed to digest SA info for Register request - " + e.getMessage());
-				e.printStackTrace();
-			}
-			md.update(all_info.getBytes("UTF-8"));
-			byte[] digest = md.digest();
-			byte[] random_bytes = new byte[ digest.length ];			// Add a random number to ensure different SAs from same PC 
-			new Random().nextBytes(random_bytes);
-			java.math.BigInteger hash_int = new java.math.BigInteger(1, digest);
-			java.math.BigInteger random_int = new java.math.BigInteger(1, random_bytes);
-			all_info_hash = String.format("%064x", hash_int.add(random_int));
-			
-			String register_request = all_info + '|' + all_info_hash;
-			if(v){
-				System.out.println("Registration request to be sent:\n" + register_request);
-			}	
-			
-			do{									// Request registration
-				Register_request reg_req= new Register_request(am_url,register_request);
+			do{										// Request registration	
 				if (reg_req.SendRegister()) {			
-					if(v){
-						break;
-					}
+					all_info_hash = reg_req.getHash();			// Retrieve the hash calculated 
+					break;
 				}
-				try {										// Wait for some time, then retry registering
+				try {									// Wait for some time, then retry registering
 					Thread.sleep( register_request_interval*1000 );	
 				} catch (InterruptedException ex) {
 					System.err.println("Interrupted main thread while sleeping between register requests - " + ex.getMessage());
@@ -156,7 +91,7 @@ public class Main {
 		ShutdownHook handler = new ShutdownHook(jobQueue, resultQueue, threadHotel);
 		handler.attach();									// Prepare for shutdown procedures
 
-		Thread tst = new Thread(new Sender(resultQueue));
+		Thread tst = new Thread(new Sender(resultQueue, am_exists, am_url));
 		tst.start();										// Start sender thread
 		threadHotel.add(tst);								
 													

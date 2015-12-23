@@ -1,5 +1,6 @@
 package dsSA.softwareAgent.helpers;
 
+import dsSA.softwareAgent.Main;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 
@@ -31,19 +32,17 @@ public class ShutdownHook {
 		this.threadHotel = th;
 	}
 
-	/**
-	 *
-	 */
 	public void attach() {
-		System.out.println("Shutdown hook attached!");
+		if(Main.v){
+			System.out.println("Shutdown hook attached!");
+		}
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 
 			@Override
 			public void run() {
-				if (jobQueue.isEmpty() && resultQueue.isEmpty()) {
-					System.out
-							.println("Structures were already empty - All jobs carried out!");
+				if (jobQueue.isEmpty() && resultQueue.isEmpty() && Main.v) {
+					System.out.println("Structures were already empty - All jobs carried out!");
 				}
 				jobQueue.clear();
 				resultQueue.clear();
@@ -60,7 +59,9 @@ public class ShutdownHook {
 						}
 					}
 				}
-				System.out.println("All threads have been terminated");
+				if(Main.v){
+					System.out.println("All threads have been terminated");
+				}
 			}
 		});
 
