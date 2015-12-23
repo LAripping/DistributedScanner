@@ -5,11 +5,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ *
+ * @author root
+ */
 public class SoftwareAgentDAO {
 
 	public SoftwareAgentDAO() {
 	}
 
+	/**
+	 *
+	 * @param sa_hash The hash of the SA that will be registered
+	 */
 	public void acceptSAregistration(String sa_hash) {
 		Connection con = null;
 		PreparedStatement stmt = null;

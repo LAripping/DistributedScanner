@@ -34,6 +34,10 @@ public class AssignedNmap extends JFrame {
 	JPanel statusPanel;
 	String Hash;
 	
+	/**
+	 *
+	 * @param HashSa
+	 */
 	public AssignedNmap(String HashSa) {
 		this.Hash = HashSa;
 		initComponents();
@@ -53,6 +57,9 @@ public class AssignedNmap extends JFrame {
 		//setLayout(flow);
 	}
 	
+	/**
+	 *
+	 */
 	public void CreateStatusPanel() {
 		statusPanel = new JPanel();
 		//statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.PAGE_AXIS));
@@ -60,6 +67,10 @@ public class AssignedNmap extends JFrame {
 		
 	}
 	
+	/**
+	 *
+	 * @param job
+	 */
 	public void addPanel(String job) {
 		JPanel saPanel = new JPanel();
 		FlowLayout flow = new FlowLayout(FlowLayout.LEFT);

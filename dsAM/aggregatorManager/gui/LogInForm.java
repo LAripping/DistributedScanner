@@ -12,6 +12,10 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import dsAM.aggregatorManager.db.UserDAO;
 
+/**
+ *
+ * @author root
+ */
 public class LogInForm extends JFrame
 {
     JPanel mypanel ;
@@ -24,6 +28,7 @@ public class LogInForm extends JFrame
              
     /**
      * Creates new form LogInForm
+	 * @param th
      */
     public LogInForm(Thread th) {
         initComponents();

@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-
+/**
+ *
+ * @author root
+ */
 public class MyConnection {
 	private String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
 
@@ -12,7 +15,11 @@ public class MyConnection {
 	private static String DBpass;
 	private static String DB_URL;
 	
-	
+	/**
+	 *
+	 * @param db_user The username for the MySQL connection to be established
+	 * @param db_pass The password for the MySQL connection to be established
+	 */
 	public static void setConnectionParameters(String db_user, String db_pass) {		
 		DBuser = db_user;
 		DBpass = db_pass;
@@ -20,9 +27,10 @@ public class MyConnection {
 		
 	}
 	
-	
-
-
+	/**
+	 *
+	 * @return
+	 */
 	public Connection getInstance(){
 		Connection con=null;
 		try {

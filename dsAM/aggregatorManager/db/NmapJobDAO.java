@@ -5,6 +5,7 @@
  */
 package dsAM.aggregatorManager.db;
 
+import dsAM.aggregatorManager.Main;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -25,6 +26,13 @@ public class NmapJobDAO {
 	public NmapJobDAO() {
 	}
 
+	/**
+	 *
+	 * @param params The parameters of the NmapJob to add for a specific SA
+	 * @param periodic Whether the NmapJob to add should be periodic or not
+	 * @param period The period of the NmapJob if it is specified as periodic
+	 * @param sa_hash The hash of the SA which the NmapJob is added for
+	 */
 	public void addNmapJob(String params, Boolean periodic, int period, String sa_hash) {
 		Calendar calendar = Calendar.getInstance();
 		Timestamp currentTimestamp = new java.sql.Timestamp(calendar.getTime().getTime());
@@ -49,7 +57,9 @@ public class NmapJobDAO {
 			stmt.executeUpdate();
 			
 			con.commit();
-			System.out.println("Nmapjob added");
+			if(Main.v){
+				System.out.println("Nmapjob added for SA:" + sa_hash);
+			}
 			
 		} catch (SQLException e) {
 			try {
@@ -71,6 +81,10 @@ public class NmapJobDAO {
 		}
 	}
 
+	/**
+	 *
+	 * @param id The id of the periodic NmapJob that will be commanded to stop
+	 */
 	public void stopCommand(int id) {
 		String params = "Stop";
 		Connection con = null;
@@ -108,6 +122,10 @@ public class NmapJobDAO {
 		}
 	}
 	
+	/**
+	 *
+	 * @param sa_hash The hash of the SA that will be commanded to exit
+	 */
 	public void exitCommand(String sa_hash){
 		String params = "exit(0)";
 
@@ -127,7 +145,9 @@ public class NmapJobDAO {
 			stmt.setString(5, sa_hash);
 			stmt.executeUpdate();
 			con.commit();
-			System.out.println("Sa terminated");
+			if(Main.v){
+				System.out.println("SA " + sa_hash + " commanded to terminate");
+			}
 		} catch (SQLException e) {
 			try {
 				con.rollback();
@@ -148,9 +168,13 @@ public class NmapJobDAO {
 		}
 	}
 		
-		
-
-	public ArrayList<String> getSAsNmpaJobs(String sa_hash, Boolean assigned_value) {
+	/**
+	 *
+	 * @param sa_hash The hash of the SA of which the NmapJobs will be found
+	 * @param assigned_value Whether the NmapJobs found should have been "assigned" or not 
+	 * @return A list of the string-encoded NmapJobs found 
+	 */
+	public ArrayList<String> getSAsNmapJobs(String sa_hash, Boolean assigned_value) {
 		ArrayList<String> ret = new ArrayList<String>();
 
 		Connection con = null;
@@ -189,8 +213,11 @@ public class NmapJobDAO {
 		return ret;
 	}
 
-	
-	
+	/**
+	 *
+	 * @param jobs A list of string-encoded NmapJobs that will be marked assigned to avoid re-sending them 
+	 * @param sa_hash The hash of the SA which the jobs were assigned to
+	 */
 	public void setNmapJobAssigned(ArrayList<String> jobs, String sa_hash) {
 		MyConnection c = new MyConnection();			// Updating sent nmapjobs' info
 		Connection con = c.getInstance();
@@ -224,7 +251,11 @@ public class NmapJobDAO {
 		}
 	}
 	
-	
+	/**
+	 *
+	 * @param job_id The id of the NmapJob for which result have arrived
+	 * @param result The actual results from the execution of that NmapJob
+	 */
 	public void setResults(int job_id, String result){
 		MessageDigest md = null;
 		try {

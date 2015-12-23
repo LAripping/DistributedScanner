@@ -1,7 +1,6 @@
 package dsAM.aggregatorManager.services;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -29,17 +28,14 @@ import java.sql.*;
 @Path("/nmapjobs")
 public class NmapJobResource {
 
-	/**
-	 * Creates a new instance of NmapJobtoSend
-	 */
-	public NmapJobResource() {
 
+	public NmapJobResource() {
 	}
 
 	/**
 	 * 
-	 * @return json'ed nmap job
-	 * @throws SQLException 
+	 * @param sa_hash The hash of the SA trying to get NmapJobs 
+	 * @return A string-encoded list of string-encoded NmapJobs assigned to this SA
 	 */
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
@@ -50,14 +46,18 @@ public class NmapJobResource {
 		ArrayList<String> job_lines=new ArrayList<String>();
 
 		NmapJobDAO dao = new NmapJobDAO();
-		job_lines = dao.getSAsNmpaJobs(sa_hash, false);
+		job_lines = dao.getSAsNmapJobs(sa_hash, false);
 		dao.setNmapJobAssigned(job_lines, sa_hash);
 		
 
 		return job_lines.toString();
 	}
 	
-	
+	/**
+	 *
+	 * @param job_id The ID of the NmapJob for which results have arrived 
+	 * @param result The actual result from the execution of this NmapJob
+	 */
 	@POST
 	@Path("/{id}")
 	@Consumes(MediaType.TEXT_PLAIN)

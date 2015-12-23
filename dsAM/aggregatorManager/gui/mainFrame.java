@@ -46,6 +46,9 @@ public class mainFrame extends JFrame {
 	AssignedNmap sr;
 	static boolean open_window = false;
 
+	/**
+	 *
+	 */
 	public mainFrame() {
 		initComponents();
 	}
@@ -67,6 +70,9 @@ public class mainFrame extends JFrame {
 
 	}
 
+	/**
+	 *
+	 */
 	public void CreateFatherPanel() {
 		Father = new JPanel();
 		//Father.setLayout(new BoxLayout(Father, BoxLayout.PAGE_AXIS));
@@ -76,12 +82,20 @@ public class mainFrame extends JFrame {
 		this.setContentPane(Father);
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public JPanel CreateStatusPanel() {
 		statusPanel = new JPanel();
 		statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.PAGE_AXIS));
 		return statusPanel;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public JPanel CreateFooter() {
 		footer = new JPanel();
 		footer.setLayout(new BoxLayout(footer, BoxLayout.PAGE_AXIS));
@@ -90,6 +104,10 @@ public class mainFrame extends JFrame {
 		return footer;
 	}
 
+	/**
+	 *
+	 * @param s
+	 */
 	public void addPanel(String s) {
 		rr = null;
 		rr = s.split("\\|");
@@ -159,7 +177,7 @@ public class mainFrame extends JFrame {
 
 	private void resultsbtnActionPerformed(ActionEvent event) {
 		NmapJobDAO dao = new NmapJobDAO();
-		ArrayList<String> assigned = dao.getSAsNmpaJobs(rr[5], true);
+		ArrayList<String> assigned = dao.getSAsNmapJobs(rr[5], true);
 		
 		for (String job : assigned) {
 			if (!open_window) {

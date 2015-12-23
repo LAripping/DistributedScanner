@@ -43,8 +43,11 @@ public class AddNmap extends JFrame{
     JButton confirmbtn ;
     //String HashSa=null;
     
-    
-    public AddNmap(String HashSa){
+	/**
+	 *
+	 * @param HashSa
+	 */
+	public AddNmap(String HashSa){
     	//this.HashSa = HashSa;
         initComponents(HashSa);
     }

@@ -13,6 +13,10 @@ import javax.swing.JTextArea;
 
 import dsAM.aggregatorManager.db.SoftwareAgentDAO;
 
+/**
+ *
+ * @author root
+ */
 public class registrationPopupWindow extends JFrame {
 
 	/**
@@ -29,16 +33,28 @@ public class registrationPopupWindow extends JFrame {
 	Thread register;
 	boolean accepted;
 
+	/**
+	 *
+	 * @return
+	 */
 	public boolean isAccepted() {
 		return accepted;
 	}
 
+	/**
+	 *
+	 * @param register_request
+	 * @param th
+	 */
 	public registrationPopupWindow(String register_request, Thread th) {
 		this.register = th;
 		this.allinfo = register_request;
 		//initComponents(register_request);
 	}
 
+	/**
+	 *
+	 */
 	public void show_gui() {
 		initComponents(this.allinfo);
 

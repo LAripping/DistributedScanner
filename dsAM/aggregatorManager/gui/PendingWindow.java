@@ -22,7 +22,11 @@ public class PendingWindow extends JFrame{
     
     JLabel message;
     JPanel mypanel;
-    public PendingWindow()
+
+	/**
+	 *
+	 */
+	public PendingWindow()
     {
         initComponents();
     }
