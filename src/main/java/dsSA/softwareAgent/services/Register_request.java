@@ -1,11 +1,5 @@
 package dsSA.softwareAgent.services;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import dsSA.softwareAgent.Main;
-import dsSA.softwareAgent.helpers.InputStreamtoString;
-import dsSA.softwareAgent.helpers.NIFtester;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -16,15 +10,18 @@ import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import dsSA.softwareAgent.Main;
+import dsSA.softwareAgent.helpers.InputStreamtoString;
+import dsSA.softwareAgent.helpers.NIFtester;
 
-/**
- *
- * @author root
- */
 public class Register_request {
 
 	String am_url;
 	String all_info_hash;
+	String all_info;
 
 	/**
 	 *
@@ -37,17 +34,9 @@ public class Register_request {
 	/**
 	 *
 	 * @return Getter for the SA's hash 
+	 * @throws SocketException 
 	 */
-	public String getHash() {
-		return all_info_hash;
-	}
-
-	/**
-	 *
-	 * @return Whether registration was accepted or not
-	 * @throws SocketException
-	 */
-	public boolean SendRegister() throws SocketException {
+	public String getHash() throws SocketException {
 		StringBuilder sb=null;
 		
 		
@@ -93,7 +82,7 @@ public class Register_request {
 		String os_version = System.getProperty("os.version");			// iv.
 		String nmap_version = command_results[2];				// v.
 
-		String all_info = device_name + '|' + interface_ip + '|'
+		all_info = device_name + '|' + interface_ip + '|'
 			+ interface_mac + '|' + os_version + '|' + nmap_version;
 		MessageDigest md = null;
 		try {
@@ -110,11 +99,25 @@ public class Register_request {
 		byte[] digest = md.digest();
 		byte[] random_bytes = new byte[digest.length];			// Add a random number to ensure different SAs from same PC 
 		new Random().nextBytes(random_bytes);
+		for(int i=0; i<digest.length; i++){
+			digest[i] ^= random_bytes[i];
+		}
 		java.math.BigInteger hash_int = new java.math.BigInteger(1, digest);
-		java.math.BigInteger random_int = new java.math.BigInteger(1, random_bytes);
-		all_info_hash = String.format("%064x", hash_int.add(random_int));
+				
+		all_info_hash = String.format("%064x", hash_int);
+		System.out.println( all_info_hash + digest.length);
 
-		String register_request = all_info + '|' + all_info_hash;
+		return all_info_hash;
+	}
+
+	/**
+	 *
+	 * @return Whether registration was accepted or not
+	 * @throws SocketException
+	 */
+	public boolean SendRegister() throws SocketException {
+
+		String register_request = all_info + '|' + all_info_hash; 
 		if (Main.v) {
 			System.out.println("Registration request to be sent:\n" + register_request);
 		}

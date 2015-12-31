@@ -153,7 +153,7 @@ public class NmapJob {
 	 * @return Whether it's a termination command for this SA
 	 */
 	public boolean checkExitCommand() {
-		return (/*this.id == -1 && */this.params.equals("exit(0)") && this.periodic && this.period == -1);
+		return (this.params.equals("exit(0)") && this.periodic && this.period == -1);
 	}
 
 	/**

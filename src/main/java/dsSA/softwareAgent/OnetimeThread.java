@@ -7,10 +7,6 @@ import java.util.concurrent.BlockingQueue;
 import dsSA.softwareAgent.helpers.InputStreamtoString;
 import dsSA.softwareAgent.helpers.NmapJob;
 
-/**
- *
- * @author root
- */
 public class OnetimeThread implements Runnable {
 
 	private final BlockingQueue<NmapJob> jobQueue;
@@ -27,11 +23,9 @@ public class OnetimeThread implements Runnable {
 		this.resultQueue = rq;
 	}
 
-
+	
 	public void run() {
-		if(Main.v){
-			System.out.println("Onetime Thread with ID: " + Thread.currentThread().getId() + " started");
-		}
+		System.out.println("Onetime Thread with ID: " + Thread.currentThread().getId() + " started");
 		
 		while (true) {
 			NmapJob job = null;
@@ -46,9 +40,7 @@ public class OnetimeThread implements Runnable {
 				System.err.println("Oops, null job retrieved from queue, in Onetime thread with ID: " + Thread.currentThread().getId());
 				System.exit(1);
 			} else {
-				if(Main.v){
-					System.out.println("Onetime Thread with ID: " + Thread.currentThread().getId() + " took job #" + job.getId() + " from queue ");
-				}
+				System.out.println("Onetime Thread with ID: " + Thread.currentThread().getId() + " took job #" + job.getId() + " from queue ");
 				Process proc;
 				try {										// Running job_token
 					proc = Runtime.getRuntime().exec("nmap " + job.getParams());

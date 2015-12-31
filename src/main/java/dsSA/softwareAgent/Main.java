@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
 import dsSA.softwareAgent.helpers.*;
 import dsSA.softwareAgent.services.NmapJob_request;
 import dsSA.softwareAgent.services.Register_request;
@@ -69,10 +68,11 @@ public class Main {
 		Readfile rf = (am_exists ? null : new Readfile(jobs_file) );
 		if(am_exists){									// Gather registration info
 			Register_request reg_req= new Register_request(am_url);
+			all_info_hash = reg_req.getHash();
 			
 			do{										// Request registration	
 				if (reg_req.SendRegister()) {			
-					all_info_hash = reg_req.getHash();			// Retrieve the hash calculated 
+					//all_info_hash = reg_req.getHash();			// Retrieve the hash calculated 
 					break;
 				}
 				try {									// Wait for some time, then retry registering
@@ -127,7 +127,7 @@ public class Main {
 			
 			for (i = 0; i < job_lines.length; i++) {					// Process each job in the block
 				if(job_lines[i]==null) break;
-				
+				System.out.println(job_lines[i]);
 				NmapJob job = new NmapJob(job_lines[i]); 
 				jobhotel.add(job);
 				
