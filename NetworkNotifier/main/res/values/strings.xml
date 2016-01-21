@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">NetworkNotifier</string>
+    <string name="check">Check Internet</string>
+    <string name="conn_mobile">Connected via Mobile Data</string>
+    <string name="conn_wifi">Connected via WiFi</string>
+    <string name="conn_no">No Internet Connection!</string>
+</resources>
