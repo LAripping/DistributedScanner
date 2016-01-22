@@ -66,7 +66,7 @@ public class NmapJobResource {
 	@Path("/{id}")
 	@Consumes(MediaType.TEXT_PLAIN)
 	public void postedResults(@PathParam("id")int job_id, String result) {
-		MessageDigest md = null;
+	/*	MessageDigest md = null;
 		try {
 			md = MessageDigest.getInstance("SHA-256");
 		} catch (NoSuchAlgorithmException e) {
@@ -145,7 +145,9 @@ public class NmapJobResource {
 				System.err.println("Failed to close SQL connection - " + e.getMessage());
 				e.printStackTrace();
 			}
-		}
+		} */
+		NmapJobDAO dao = new NmapJobDAO();
+		dao.setResults(job_id, result);
 	}
 	
 }

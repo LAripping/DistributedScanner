@@ -39,7 +39,8 @@ public class Main {
 	}    
 
 	private static URI getBaseURI() {
-		return UriBuilder.fromUri("http://localhost/").port(getPort(9998)).build();
+		//return UriBuilder.fromUri("http://localhost/").port(getPort(9998)).build();
+		return UriBuilder.fromUri("http://192.168.1.69/").port(getPort(9998)).build();
 	}
 
 	public static final URI BASE_URI = getBaseURI();
@@ -88,6 +89,7 @@ public class Main {
 				e.printStackTrace();
 			}
 		}											// Start the server
+		
 		startServer();
 		System.out.println("Aggregator Manager has started. Close the GUI window to stop the server ...");
 		

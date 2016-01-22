@@ -22,6 +22,7 @@ import dsAM.aggregatorManager.gui.registrationRequest;
  *
  * @author root
  */
+
 @Path("/softwareagent")
 public class SoftwareAgentResource {
 	static boolean open_window=false;
@@ -90,11 +91,7 @@ public class SoftwareAgentResource {
 		threadHotel.get(index).interrupt();
 	}
 	
-	/**
-	 * PUT method for registering a SoftwareAgent 
-	 * @param register_request The SA's registration request containing all of the required info
-	 * @return The response that will be sent to the inquiring SA
-	 */
+	
 	@PUT
 	@Consumes(MediaType.TEXT_PLAIN)
 	public Response registerAgent(String register_request) {
@@ -138,4 +135,4 @@ public class SoftwareAgentResource {
 			return Response.status(406).build();		// return a "406-Not Acceptable" status
 		}
 	}
-}
+} 

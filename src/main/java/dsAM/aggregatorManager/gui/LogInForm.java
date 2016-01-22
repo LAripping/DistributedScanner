@@ -46,6 +46,9 @@ public class LogInForm extends JFrame
     private JDialog dialog ;
 	private Thread server;
 	private static PendingRequests pr;
+	private static final int SUCCESSFUL_LOGIN = 0;
+	private static final int SECOND_TIME_LOGIN = 1;
+	private static final int DATA_DO_NOT_MATCH = 2;
 
 	
 	public static PendingRequests getPR()
@@ -190,7 +193,9 @@ private void createAndShowGUI()
     private void loginbtnActionPerformed(java.awt.event.ActionEvent event)
     {
 		UserDAO user = new UserDAO(usernameField,passwordField);
-    	if(user.CheckAdmin())
+    	user.CheckAdmin();
+    	int loginStatus = user.getStatus();
+    	if(loginStatus == SUCCESSFUL_LOGIN)
     	{
     		this.dispose();
     		synchronized(this.server){
@@ -199,10 +204,16 @@ private void createAndShowGUI()
             LogInForm.pr = new PendingRequests();
             pr.setVisible(true);
     	}
-    	else
+    	else if(loginStatus == SECOND_TIME_LOGIN)
     	{
-    		System.out.println("Wrong Username or Password!!!");
+    		JOptionPane.showMessageDialog(null, "This user has already signed in!",
+                                        "Confirmation", JOptionPane.INFORMATION_MESSAGE);
     	}
+    	else if(loginStatus == DATA_DO_NOT_MATCH)
+    	{
+			JOptionPane.showMessageDialog(null, "Sorry, wrong username or password!",
+                                        "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     private void cancelbtnActionPerformed(ActionEvent event)
