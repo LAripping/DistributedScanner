@@ -14,9 +14,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/check"
-        android:id="@+id/button"
+        android:id="@+id/btn_check_internet"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:onClick="checkInternet"/>
+        android:onClick="demo_checkInternet"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/assign"
+        android:id="@+id/btn_assign_job"
+        android:layout_below="@+id/btn_check_internet"
+        android:layout_marginTop="65dp"
+        android:layout_alignEnd="@+id/btn_check_internet"
+        android:layout_alignStart="@+id/btn_check_internet"
+        android:onClick="assignJob"/>
 
 </RelativeLayout>

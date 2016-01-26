@@ -4,4 +4,13 @@
     <string name="conn_mobile">Connected via Mobile Data</string>
     <string name="conn_wifi">Connected via WiFi</string>
     <string name="conn_no">No Internet Connection!</string>
+    <string name="assign">Assign Job</string>
+    <string name="specify_job">Specify new job info</string>
+    <string name="params">Parameters:</string>
+    <string name="send">Send</string>
+    <string name="reset">Reset</string>
+    <string name="cancel">Cancel</string>
+    <string name="periodic">Run job periodically?</string>
+    <string name="period">Period: (seconds)</string>
+    <string name="param_hint">e.g. -A -oX -localhost</string>
 </resources>
