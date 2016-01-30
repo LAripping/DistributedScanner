@@ -22,8 +22,9 @@ public class ResultsResource {
 		if(list.isEmpty()){
 			return "[]";
 		} 
-		
-		return list.toString();
+		StringBuilder sb = new StringBuilder();
+		for(String single_res : list) sb.append(single_res + "</ResultEndsHere>");
+		return sb.toString();
 	}
 
 }

@@ -7,11 +7,16 @@ import dsAM.aggregatorManager.Main;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import dsAM.aggregatorManager.db.NmapJobDAO;
 import dsAM.aggregatorManager.gui.AMPanel;
 import dsAM.aggregatorManager.gui.LogInForm;
 import dsAM.aggregatorManager.gui.registrationRequest;
@@ -28,7 +33,7 @@ public class SoftwareAgentResource {
 	static boolean open_window=false;
 	static private AMPanel mf;
 	static private ArrayList<JPanel> panelsArray;
-	static private ArrayList<String> hashArray;
+	static private ArrayList<String> hashArray = null;
 	static private ArrayList<Thread> threadHotel;
 	
 	public static boolean getOpen_window() {
@@ -135,4 +140,25 @@ public class SoftwareAgentResource {
 			return Response.status(406).build();		// return a "406-Not Acceptable" status
 		}
 	}
-} 
+	
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getSAs(){
+		if (hashArray.isEmpty() || hashArray==null){
+			return "There are no SAs registered";
+		}
+		else {
+			
+			return gethashArray().toString();
+		}
+	}
+	
+	@DELETE
+	@Path("/{hash}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	public void Terminate(@PathParam("hash")String hash){
+		NmapJobDAO dao = new NmapJobDAO();
+		dao.exitCommand(hash);
+		System.out.println(hash);
+	}
+}
