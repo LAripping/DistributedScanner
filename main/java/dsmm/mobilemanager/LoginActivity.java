@@ -3,6 +3,8 @@ package dsmm.mobilemanager;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -36,13 +38,14 @@ import java.util.List;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity  {
+public class LoginActivity extends AppCompatActivity{
 
 
     private EditText username;
     private EditText password;
     private Button login_button;
 
+    //TODO:eite caps eite mikro to pairnei
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +77,7 @@ public class LoginActivity extends AppCompatActivity  {
         Intent i=new Intent(getBaseContext(),RegisterActivity.class);
         startActivity(i);
         finish();
-        //TODO: When an activity have to finish
     }
+
 }
 

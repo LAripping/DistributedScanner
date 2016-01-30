@@ -9,33 +9,37 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="dsmm.mobilemanager.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="GAMW TON PEIRAIA"
-        android:id="@+id/textView2"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="38dp" />
 
-    <Button
+    <fragment
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Press for dialog"
-        android:id="@+id/buttonDialog"
-        android:onClick="pressD"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="81dp" />
+        class ="dsmm.mobilemanager.SAListFragment"
+        android:id="@+id/SaListFragment"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Logout"
         android:id="@+id/buttonLogout"
-        android:layout_below="@+id/buttonDialog"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="84dp" />
+        android:layout_gravity="right"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Results"
+        android:id="@+id/showallbtn"
+        android:onClick="showResults"
+        android:layout_alignTop="@+id/buttonLogout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 
 </RelativeLayout>

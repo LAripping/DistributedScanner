@@ -33,7 +33,8 @@ public class RegisterAsyncTask extends AsyncTask <String,Void,Boolean> {
 
             try {
 
-                final String url = "http://192.168.1.69:9998/users"; //TODO url manager dialog
+                final String url = activity.getResources()
+                        .getString(R.string.am_url) + "/users"; //TODO url manager dialog
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
                 restTemplate.put(url, request);

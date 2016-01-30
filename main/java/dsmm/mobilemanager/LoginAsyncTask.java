@@ -1,5 +1,6 @@
 package dsmm.mobilemanager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
  */
 public class LoginAsyncTask extends AsyncTask<String,Void,Boolean> {
 
-    private AppCompatActivity activity;
+    private Activity activity;
     private String data;
 
     public LoginAsyncTask(AppCompatActivity activity){
@@ -28,7 +29,8 @@ public class LoginAsyncTask extends AsyncTask<String,Void,Boolean> {
 
         try {
 
-            final String url = "http://192.168.1.69:9998/users/login"; //TODO url manager dialog
+            final String url = activity.getResources().getString(R.string.am_url)
+                    + "/users/login"; //TODO url manager dialog
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
             restTemplate.postForObject(url, data, String.class);
@@ -47,7 +49,7 @@ public class LoginAsyncTask extends AsyncTask<String,Void,Boolean> {
             Toast toast = Toast.makeText(activity, "Invalid login please try again!", Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER,0,0);
             toast.show();
-            //activity.recreate();
+
             activity.startActivity(new Intent(activity,LoginActivity.class));
             activity.finish();
 

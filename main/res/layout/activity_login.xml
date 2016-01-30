@@ -81,7 +81,10 @@
                 android:text="Register"
                 android:textStyle="bold"
                 android:onClick="registerb"/>
+
         </LinearLayout>
     </ScrollView>
+
+
 
 </LinearLayout>
