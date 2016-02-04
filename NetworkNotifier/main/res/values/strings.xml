@@ -13,4 +13,11 @@
     <string name="periodic">Run job periodically?</string>
     <string name="period">Period: (seconds)</string>
     <string name="param_hint">e.g. -A -oX -localhost</string>
+    <string name="load">Load something now!</string>
+    <string name="background">Do something in background!</string>
+    <string name="title_activity_demo">Logged In!</string>
+    <string name="login">Log In</string>
+    <string name="logout">Log out</string>
+    <string name="give_username">Give Username</string>
+    <string name="give_password">Give Password</string>
 </resources>
