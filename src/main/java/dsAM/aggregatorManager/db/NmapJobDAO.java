@@ -453,5 +453,38 @@ public class NmapJobDAO {
 		}
 	}
 	
+	public void setNmapJobNotAssigned(int id) {
+		MyConnection c = new MyConnection();			// Updating sent nmapjobs' info
+		Connection con = c.getInstance();
+		PreparedStatement stmt = null;
+
+		String sql = "UPDATE nmap_jobs SET assigned=? WHERE id=?";
+		try {
+			con.setAutoCommit(false);
+			stmt = con.prepareStatement(sql);
+			stmt.setBoolean(1, false);
+			stmt.setInt(2, id);
+			stmt.executeUpdate();
+			con.commit();
+		} catch (SQLException e) {
+			System.err.println("SQl update statement for nmapjobs failed - " + e.getMessage());
+			e.printStackTrace();
+			try {
+				con.rollback();
+			} catch (SQLException e1) {
+				System.err.println("Transaction rollback failed");
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				stmt.close();
+				con.close();
+			} catch (SQLException e) {
+				System.err.println("Failed to close SQL connection - " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	
 }

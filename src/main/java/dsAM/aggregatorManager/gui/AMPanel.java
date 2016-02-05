@@ -111,7 +111,6 @@ public class AMPanel extends JFrame implements WindowListener
         int screenWidth = screenSize.width;
         //setSize(screenWidth/2 , (int) (screenHeight/1.5));
         setSize(screenWidth , screenHeight);
-        setLocation(screenWidth / 4, screenHeight / 5);
         setResizable(true);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setTitle("Aggregator Manager");      

@@ -144,12 +144,16 @@ public class SoftwareAgentResource {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getSAs(){
-		if (hashArray.isEmpty() || hashArray==null){
+		if (hashArray==null){
 			return "There are no SAs registered";
 		}
 		else {
-			
-			return gethashArray().toString();
+			if(hashArray.isEmpty()){
+				return "There are no SAs registered";
+			}
+			else{
+				return gethashArray().toString();
+			}
 		}
 	}
 	
@@ -159,6 +163,5 @@ public class SoftwareAgentResource {
 	public void Terminate(@PathParam("hash")String hash){
 		NmapJobDAO dao = new NmapJobDAO();
 		dao.exitCommand(hash);
-		System.out.println(hash);
 	}
 }

@@ -1,4 +1,4 @@
-package dsAM.aggregatorManager.services;
+ package dsAM.aggregatorManager.services;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -31,7 +31,7 @@ public class UsersResource {
 	@POST
 	@Path("/login")
 	@Consumes(MediaType.TEXT_PLAIN)
-	public Response UserLogin(String data){
+	public String UserLogin(String data){
 		System.out.println(data);
 		String[] details=data.split(",");
 		String username=details[0];
@@ -41,16 +41,15 @@ public class UsersResource {
 		int loginStatus = dao.getStatus();
 		if(loginStatus == SUCCESSFUL_LOGIN)
     	{
-			return Response.ok(MediaType.TEXT_PLAIN).build();
+			return "ok";
     	}
     	else if(loginStatus == SECOND_TIME_LOGIN)
     	{
-    		return Response.status(400).build();
+    		return "second time";
     	}
-    	else 
-    	{
-    		return Response.status(400).build();
-        }
+    	else{
+    		return "error";
+    	}
 		
 	}
 	
