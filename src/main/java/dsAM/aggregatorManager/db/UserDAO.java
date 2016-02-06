@@ -31,6 +31,37 @@ public class UserDAO {
 		return this.status;
 	}
 	
+	public boolean userExists(String username) {
+		Connection con = null;
+		PreparedStatement stmt = null;
+                ResultSet rs = null;
+		MyConnection c = new MyConnection();
+		con = c.getInstance();
+                int count = -1;
+		String sql = "SELECT COUNT(*) AS total FROM users WHERE username=?";
+		try {
+			stmt=con.prepareStatement( sql );
+			stmt.setString(1, username);
+			rs = stmt.executeQuery();
+			if(rs.next()) 								
+			{
+				count = rs.getInt("total");
+                        }
+		} catch (SQLException e){
+                        System.err.println("SQl checkRegister select statement failed - " + e.getMessage());
+			e.printStackTrace();
+		} finally{
+			try {
+				stmt.close();
+				con.close();
+			} catch (SQLException e) {
+				System.err.println("Failed to close SQL connection - " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+            return count != 0;
+        }
+	
 	
 	public void CheckAdmin() 
 	{
