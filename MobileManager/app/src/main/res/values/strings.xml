@@ -16,7 +16,7 @@
     <string name="conn_wifi">Connected via WiFi</string>
     <string name="conn_no">No Internet Connection!</string>
 
-    <string name="am_url">http://172.20.10.6:1118</string>
+    <string name="am_url">http://192.168.1.168:1118</string>
     <string name="empty_msg">Sorry but there are no registered Software Agents</string>
 
     <string name="send">Send</string>
@@ -31,6 +31,10 @@
     <string name="notification_text">Transferring nmap jobs</string>
     <string name="operation_complete">DB contents sent succesfully!</string>
     <string name="operation_failed">DB sending failed!</string>
+    <string name="ip">IP</string>
+    <string name="port">Port:</string>
+    <string name="ip_title">Specify AM\'s IP address and port</string>
+    <string name="ok">OK</string>
 
 
 </resources>

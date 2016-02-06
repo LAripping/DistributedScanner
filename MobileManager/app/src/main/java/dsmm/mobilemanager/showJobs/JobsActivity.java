@@ -2,15 +2,15 @@ package dsmm.mobilemanager.showJobs;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import java.util.ArrayList;
 
-import dsmm.mobilemanager.PopupAdapter;
 import dsmm.mobilemanager.R;
-import dsmm.mobilemanager.SAListFragment;
-import dsmm.mobilemanager.SAsAsyncTask;
+import dsmm.mobilemanager.dBoperation.ConnectivityReceiver;
 import dsmm.mobilemanager.users.LoginActivity;
 
 public class JobsActivity extends AppCompatActivity {
@@ -19,6 +19,8 @@ public class JobsActivity extends AppCompatActivity {
     private ArrayList<String> jobsArray;
     private JobsAdapter jobsAdapter;
     private String hash;
+
+    private ConnectivityReceiver conRes = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,5 +55,30 @@ public class JobsActivity extends AppCompatActivity {
         Intent i=new Intent(getBaseContext(),LoginActivity.class);
         startActivity(i);
         finish();
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(conRes==null){
+            conRes = new ConnectivityReceiver();
+
+            final IntentFilter infilt = new IntentFilter();
+            infilt.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+
+            registerReceiver(conRes,infilt );
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if(conRes!=null){
+            unregisterReceiver(conRes);
+            conRes = null;
+        }
     }
 }

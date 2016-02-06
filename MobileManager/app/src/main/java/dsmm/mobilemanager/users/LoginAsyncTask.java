@@ -11,15 +11,11 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.HttpURLConnection;
-
-import dsmm.mobilemanager.MainActivity;
+import dsmm.mobilemanager.showSAs.MainActivity;
 import dsmm.mobilemanager.R;
 
 /**
@@ -54,8 +50,7 @@ public class LoginAsyncTask extends AsyncTask<String,Void,Boolean> {
 
         try {
 
-            final String url = activity.getResources().getString(R.string.am_url)
-                    + "/users/login"; //TODO url manager dialog
+            final String url = MainActivity.am_url+ "/users/login";
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
             restTemplate.getMessageConverters().add(new StringHttpMessageConverter());

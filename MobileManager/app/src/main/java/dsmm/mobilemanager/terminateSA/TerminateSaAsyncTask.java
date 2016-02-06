@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import dsmm.mobilemanager.R;
 import dsmm.mobilemanager.dBoperation.DBoperations;
+import dsmm.mobilemanager.showSAs.MainActivity;
 
 /**
  * Created by apostolis on 23/1/2016.
@@ -49,8 +50,7 @@ public class TerminateSaAsyncTask extends AsyncTask<Void,Void,Boolean> {
         }
 
         try {
-            final String url = context.getResources()
-                    .getString(R.string.am_url) + "/softwareagent";
+            final String url = MainActivity.am_url+ "/softwareagent";
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
             restTemplate.delete(url+"/"+hash);

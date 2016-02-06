@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 
 import dsmm.mobilemanager.R;
+import dsmm.mobilemanager.showSAs.MainActivity;
 
 /**
  * Created by apostolis on 5/2/2016.
@@ -68,8 +69,7 @@ public class SendDbAsyncTask extends AsyncTask<Void,Void,Integer> {
             if(remains[1].equals("exit(0)"))
             {
                 try {
-                    final String url = context.getResources()
-                            .getString(R.string.am_url) + "/softwareagent";
+                    final String url = MainActivity.am_url + "/softwareagent";
                     RestTemplate restTemplate = new RestTemplate();
                     restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
                     restTemplate.delete(url+"/"+remains[4]);
@@ -83,8 +83,7 @@ public class SendDbAsyncTask extends AsyncTask<Void,Void,Integer> {
             else if(remains[1].equals("Stop"))
             {
                 try {
-                    final String url = context.getResources()
-                            .getString(R.string.am_url) + "/nmapjobs";
+                    final String url = MainActivity.am_url+  "/nmapjobs";
                     RestTemplate restTemplate = new RestTemplate();
                     restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
                     restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
@@ -102,8 +101,7 @@ public class SendDbAsyncTask extends AsyncTask<Void,Void,Integer> {
                 String hash = remains[4];
                 try {
 
-                    final String url = context.getResources()
-                            .getString(R.string.am_url) + "/nmapjobs"; //TODO url manager dialog
+                    final String url = MainActivity.am_url+  "/nmapjobs";
                     RestTemplate restTemplate = new RestTemplate();
                     restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
                     restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 

@@ -14,6 +14,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import dsmm.mobilemanager.R;
+import dsmm.mobilemanager.showSAs.MainActivity;
 
 /**
  * Created by apostolis on 4/2/2016.
@@ -42,8 +43,7 @@ public class RerunAsyncTask extends AsyncTask<Void,Void,Boolean>  {
 
 
         try {
-            final String url = context.getResources()
-                    .getString(R.string.am_url) + "/nmapjobs/rerun";
+            final String url = MainActivity.am_url+ "/nmapjobs/rerun";
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
             restTemplate.getMessageConverters().add(new StringHttpMessageConverter());

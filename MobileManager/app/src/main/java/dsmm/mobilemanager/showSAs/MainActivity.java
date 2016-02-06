@@ -1,8 +1,9 @@
-package dsmm.mobilemanager;
+package dsmm.mobilemanager.showSAs;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -19,7 +20,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import dsmm.mobilemanager.dBoperation.DBAsyncTaskOpen;
+import dsmm.mobilemanager.R;
+import dsmm.mobilemanager.dBoperation.ConnectivityReceiver;
 import dsmm.mobilemanager.showResults.ResultsAsyncTask;
 import dsmm.mobilemanager.users.LogoutAsyncTask;
 
@@ -35,11 +37,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private SAsAsyncTask mSAsAsyncTask;
     private SwipeRefreshLayout mySwipeRefreshLayout;
     private PopupAdapter myPopupAdapter;
-    private ListView SaList;
+    private ConnectivityReceiver conRes = null;
 
-    public PopupAdapter getMyPopupAdapter(){
-        return myPopupAdapter;
-    }
+    public static String am_url;
+
 
 
     @Override
@@ -129,6 +130,30 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         final ResultsAsyncTask rs = new ResultsAsyncTask(dialog,this,input);
         rs.execute();
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(conRes==null){
+            conRes = new ConnectivityReceiver();
+
+            final IntentFilter infilt = new IntentFilter();
+            infilt.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+
+            registerReceiver(conRes,infilt );
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if(conRes!=null){
+            unregisterReceiver(conRes);
+            conRes = null;
+        }
     }
 
 

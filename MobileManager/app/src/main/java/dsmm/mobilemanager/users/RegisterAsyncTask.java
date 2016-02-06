@@ -12,9 +12,10 @@ import android.widget.Toast;
 
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import dsmm.mobilemanager.MainActivity;
+import dsmm.mobilemanager.showSAs.MainActivity;
 import dsmm.mobilemanager.R;
 
 /**
@@ -46,8 +47,7 @@ public class RegisterAsyncTask extends AsyncTask <String,Void,Boolean> {
         }
             try {
 
-                final String url = activity.getResources()
-                        .getString(R.string.am_url) + "/users"; //TODO url manager dialog
+                final String url = MainActivity.am_url+ "/users";
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
                 restTemplate.getMessageConverters().add(new StringHttpMessageConverter());

@@ -11,9 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 
-import dsmm.mobilemanager.MainActivity;
 import dsmm.mobilemanager.R;
-import dsmm.mobilemanager.SAListFragment;
+import dsmm.mobilemanager.showSAs.SAListFragment;
 
 /**
  * Created by tsaou on 22/1/2016.

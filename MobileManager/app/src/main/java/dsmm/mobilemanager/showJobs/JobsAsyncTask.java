@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import dsmm.mobilemanager.R;
+import dsmm.mobilemanager.showSAs.MainActivity;
 
 /**
  * Created by apostolis on 24/1/2016.
@@ -45,8 +46,7 @@ public class JobsAsyncTask extends AsyncTask<Void,Void,Boolean> {
         }
 
         try {
-            final String url = activity.getResources()
-                    .getString(R.string.am_url) + "/nmapjobs";
+            final String url = MainActivity.am_url+ "/nmapjobs";
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
             jobs = restTemplate.getForObject(url+"/"+hash, String.class);

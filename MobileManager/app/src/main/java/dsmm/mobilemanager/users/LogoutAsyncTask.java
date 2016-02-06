@@ -15,6 +15,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import dsmm.mobilemanager.R;
+import dsmm.mobilemanager.showSAs.MainActivity;
 
 /**
  * Created by apostolis on 20/1/2016.
@@ -48,8 +49,7 @@ public class LogoutAsyncTask extends AsyncTask<String,Void,Boolean> {
 
         try {
 
-            final String url = context.getResources()
-                    .getString(R.string.am_url) + "/users/logout"; //TODO url manager dialog
+            final String url = MainActivity.am_url+  "/users/logout";
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
             restTemplate.getMessageConverters().add(new StringHttpMessageConverter());

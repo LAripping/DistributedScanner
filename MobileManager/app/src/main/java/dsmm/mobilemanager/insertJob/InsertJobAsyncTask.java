@@ -27,6 +27,7 @@ import java.net.URL;
 
 import dsmm.mobilemanager.R;
 import dsmm.mobilemanager.dBoperation.DBoperations;
+import dsmm.mobilemanager.showSAs.MainActivity;
 
 /**
  * Created by tsaou on 23/1/2016.
@@ -66,8 +67,7 @@ public class InsertJobAsyncTask extends AsyncTask<String,Void,Integer> {
 
 
         try {
-            final String url = context.getResources()
-                    .getString(R.string.am_url) + "/nmapjobs"; //TODO url manager dialog
+            final String url = MainActivity.am_url+ "/nmapjobs";
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
             restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());

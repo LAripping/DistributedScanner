@@ -4,6 +4,8 @@ package dsmm.mobilemanager.users;
  * Created by apostolis on 16/1/2016.
  */
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
@@ -13,12 +15,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import dsmm.mobilemanager.R;
+import dsmm.mobilemanager.dBoperation.ConnectivityReceiver;
 
 public class RegisterActivity extends ActionBarActivity {
     private EditText username;
     private EditText password;
     private EditText repassword;
     private Button button;
+    private ConnectivityReceiver conRes = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,30 @@ public class RegisterActivity extends ActionBarActivity {
         Intent i=new Intent(getBaseContext(),LoginActivity.class);
         startActivity(i);
         finish();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(conRes==null){
+            conRes = new ConnectivityReceiver();
+
+            final IntentFilter infilt = new IntentFilter();
+            infilt.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+
+            registerReceiver(conRes,infilt );
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if(conRes!=null){
+            unregisterReceiver(conRes);
+            conRes = null;
+        }
     }
 
 

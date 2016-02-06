@@ -1,16 +1,26 @@
 package dsmm.mobilemanager.users;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
-import dsmm.mobilemanager.MainActivity;
+import dsmm.mobilemanager.dBoperation.ConnectivityReceiver;
+import dsmm.mobilemanager.insertJob.AssignJobDialogFragment;
+import dsmm.mobilemanager.showSAs.MainActivity;
 import dsmm.mobilemanager.R;
 
 
@@ -23,6 +33,7 @@ public class LoginActivity extends AppCompatActivity{
     private EditText username;
     private EditText password;
     private Button login_button;
+    private ConnectivityReceiver conRes = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +49,12 @@ public class LoginActivity extends AppCompatActivity{
         setContentView(R.layout.activity_login);
 
         setTitle(getResources().getString(R.string.title_activity_login));
+
+        //Create a DialogFragment to get AM's url
+        DialogFragment newFragment = new AmUrlDialogFragment();
+
+        //Show the DialogFragment to the user
+        newFragment.show(getFragmentManager(), "amurl");
 
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
@@ -59,11 +76,39 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
     }
+
+
     public void registerb(View view) {
         Intent i=new Intent(getBaseContext(),RegisterActivity.class);
         startActivity(i);
         finish();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(conRes==null){
+            conRes = new ConnectivityReceiver();
+
+            final IntentFilter infilt = new IntentFilter();
+            infilt.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+
+            registerReceiver(conRes,infilt );
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if(conRes!=null){
+            unregisterReceiver(conRes);
+            conRes = null;
+        }
+    }
+
+
 
 }
 

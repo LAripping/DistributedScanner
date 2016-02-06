@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 
 import dsmm.mobilemanager.R;
+import dsmm.mobilemanager.showSAs.MainActivity;
 
 /**
  * Created by apostolis on 1/2/2016.
@@ -57,8 +58,7 @@ public class SaResultsAsyncTask extends AsyncTask<Void,Void,Boolean> {
 
 
         try {
-            final String url = context.getResources()
-                    .getString(R.string.am_url) + "/results";
+            final String url = MainActivity.am_url+  "/results";
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
             restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
@@ -102,7 +102,7 @@ public class SaResultsAsyncTask extends AsyncTask<Void,Void,Boolean> {
                                 show_res[j] = all_res[i];
                                 j++;
                             }
-                            textView.setText(Arrays.toString(show_res).replaceAll(", ", "\n").replace("[", "").replace("]", ""));
+                            textView.setText(Arrays.toString(show_res).replaceAll(", ", "\n"+"\n").replace("[", "").replace("]", ""));
 
                             Button dialogbtn = (Button) res_dialog.findViewById(R.id.ok_button);
 

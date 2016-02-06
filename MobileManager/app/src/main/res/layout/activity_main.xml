@@ -7,12 +7,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="dsmm.mobilemanager.MainActivity">
+    tools:context=".showSAs.MainActivity">
 
     <fragment
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:name="dsmm.mobilemanager.SAListFragment"
+        android:name="dsmm.mobilemanager.showSAs.SAListFragment"
         android:id="@+id/SaListFragment"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"

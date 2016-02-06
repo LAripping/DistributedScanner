@@ -1,17 +1,11 @@
-package dsmm.mobilemanager;
+package dsmm.mobilemanager.showSAs;
 
-import android.app.FragmentManager;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Gravity;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -20,6 +14,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import dsmm.mobilemanager.R;
 
 /**
  * Created by apostolis on 23/1/2016.
@@ -48,8 +44,7 @@ public class SAsAsyncTask extends AsyncTask<Void,Void,Boolean> {
         }
 
         try {
-            final String url = activity.getResources()
-                    .getString(R.string.am_url) + "/softwareagent";
+            final String url = MainActivity.am_url+ "/softwareagent";
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
             restTemplate.getMessageConverters().add(new StringHttpMessageConverter());

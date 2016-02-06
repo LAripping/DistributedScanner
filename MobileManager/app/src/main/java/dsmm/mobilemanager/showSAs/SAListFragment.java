@@ -1,4 +1,4 @@
-package dsmm.mobilemanager;
+package dsmm.mobilemanager.showSAs;
 
 import android.app.AlertDialog;
 import android.app.ListFragment;
@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import dsmm.mobilemanager.R;
 import dsmm.mobilemanager.insertJob.AssignJobDialogFragment;
 import dsmm.mobilemanager.showJobs.JobsActivity;
 import dsmm.mobilemanager.showResults.SaResultsAsyncTask;

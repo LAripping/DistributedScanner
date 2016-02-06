@@ -6,9 +6,7 @@ import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 
-import dsmm.mobilemanager.MainActivity;
 import dsmm.mobilemanager.R;
-import dsmm.mobilemanager.SAListFragment;
 
 /**
  * Created by apostolis on 3/2/2016.

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/linearLayout">
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:text="@string/ip"
+            android:id="@+id/textip"
+            android:layout_weight="0"
+            android:textSize="14sp"
+            android:textIsSelectable="false"
+            android:textAlignment="viewStart"
+            android:layout_gravity="left"
+            android:gravity="center_vertical|left" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:id="@+id/ip"
+            android:layout_weight="1"
+            android:inputType="text|textUri"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:paddingStart="10dp"
+            android:layout_marginLeft="10dp" />
+    </LinearLayout>>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/linearLayout2"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:text="@string/port"
+            android:id="@+id/textport"
+            android:layout_weight="0"
+            android:textSize="14sp"
+            android:textIsSelectable="false"
+            android:layout_alignStart="@+id/linearLayout"
+            android:layout_below="@+id/linearLayout"
+            android:gravity="center"
+            android:textAlignment="viewStart"
+            android:layout_gravity="left" />
+
+        <EditText
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/port"
+            android:layout_below="@+id/linearLayout"
+            android:layout_toRightOf="@+id/textport"
+            android:layout_toEndOf="@+id/textport"
+            android:paddingStart="10dp"
+            android:layout_marginLeft="10dp" />
+    </LinearLayout>
+
+</RelativeLayout>

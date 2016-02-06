@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import dsmm.mobilemanager.R;
 import dsmm.mobilemanager.dBoperation.DBoperations;
+import dsmm.mobilemanager.showSAs.MainActivity;
 
 /**
  * Created by apostolis on 2/2/2016.
@@ -46,8 +47,7 @@ public class DeleteJobAsyncTask extends AsyncTask<Void,Void,Boolean> {
 
 
         try {
-            final String url = context.getResources()
-                    .getString(R.string.am_url) + "/nmapjobs";
+            final String url = MainActivity.am_url+ "/nmapjobs";
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
             restTemplate.getMessageConverters().add(new StringHttpMessageConverter());

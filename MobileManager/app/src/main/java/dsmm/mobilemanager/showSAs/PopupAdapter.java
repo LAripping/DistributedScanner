@@ -1,11 +1,12 @@
-package dsmm.mobilemanager;
+package dsmm.mobilemanager.showSAs;
 
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import java.io.PipedOutputStream;
 import java.util.ArrayList;
+
+import dsmm.mobilemanager.R;
 
 /**
  * Created by apostolis on 28/1/2016.
