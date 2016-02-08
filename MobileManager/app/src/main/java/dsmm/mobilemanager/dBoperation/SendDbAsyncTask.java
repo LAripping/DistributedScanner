@@ -49,7 +49,7 @@ public class SendDbAsyncTask extends AsyncTask<Void,Void,Integer> {
                 = new NotificationCompat.Builder(context);
         mBuilder.setContentTitle(context.getString(R.string.notification_title))
                 .setContentText(context.getString(R.string.notification_text))
-                .setSmallIcon(R.drawable.ic_compare_arrows_black_24dp);
+                .setSmallIcon(R.drawable.ic_compare_arrows);
 
         // Start the progress bar (intermediate type)
         mBuilder.setProgress(0, 0, true);
@@ -134,7 +134,7 @@ public class SendDbAsyncTask extends AsyncTask<Void,Void,Integer> {
         // with a "Task Complete" one
         if(results != -1) {
             mBuilder.setContentText(context.getString(R.string.operation_complete))
-                    .setSmallIcon(R.drawable.ic_done_black_24dp)
+                    .setSmallIcon(R.drawable.ic_done)
                     .setProgress(0, 0, false);
             mNotifyManager.notify(id, mBuilder.build());
 
@@ -144,7 +144,7 @@ public class SendDbAsyncTask extends AsyncTask<Void,Void,Integer> {
         // OR a "Failed" one in case something went wrong
         else{
             mBuilder.setContentText(context.getString(R.string.operation_failed))
-                    .setSmallIcon(R.drawable.ic_highlight_off_black_24dp)
+                    .setSmallIcon(R.drawable.ic_highlight_off)
                     .setProgress(0, 0, false);
             mNotifyManager.notify(id, mBuilder.build());
         }
