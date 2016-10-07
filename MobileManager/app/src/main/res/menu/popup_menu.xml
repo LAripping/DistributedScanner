@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_add_nmap"
+        android:title="add nmap" />
+
+    <item
+        android:id="@+id/menu_show_nmap"
+        android:title="show nmap jobs" />
+
+    <item
+        android:id="@+id/menu_terminate"
+        android:title="terminate" />
+
+    <item
+        android:id="@+id/menu_show_results"
+        android:title="show results" />
+</menu>
