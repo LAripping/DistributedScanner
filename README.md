@@ -99,8 +99,8 @@ In detail, the services exposed are the following:
 | Method | URL                          | URL Params      | Body                     |  Description                                                |
 | :----: | :-------------               | :----------     | :-------                 | :------------                                               | 
 | PUT    | <AMurl>`/softwareagent`      |                 | "name\|password"         | Register the Agent in the Manager's Database*.              | 
-| GET    | <AMurl>`/nmapjobs`           |`?hash=<SA_hash>`|                          | Request for NmapJobs from agent, identified by its hash**.  | 
-| POST   | <AMurl>`/nmapjobs/<job_id>`  |                 |  "Starting Nmap 6.40..." | Send results from nmap identified by <job_id>*.             | 
+| GET    | <AMurl>`/nmapjobs`           |`?hash=<SA_hash>`|                          | Request for NmapJobs from agent, identified by its `hash`**.  | 
+| POST   | <AMurl>`/nmapjobs/<job_id>`  |                 |  "Starting Nmap 6.40..." | Send results from nmap identified by `<job_id>`*.             | 
 
   *Returns `200 OK` in success or `400 Bad Request` otherwise, 
   both with an empty response body.
@@ -130,11 +130,12 @@ each own `pom.xml` file that specifies them.
 - The SoftwareAgent app can even run __without a NIC__ in the 
   system host. This case was added for testing purposes in 
   combination with the fact that this situation arised in development :)
-    + If no network interface is found, the SA is registered with
+    * If no network interface is found, the SA is registered with
       the following conventions:
-        | Interface - MAC | Interface IP | AM URL           |
-        | :-------------: | :----------: | :--------------: |
-        | `NO-NIF`        | `127.0.0.0`  | `127.0.0.0:9998` |
+      
+| Interface - MAC | Interface IP | AM URL           |
+| :-------------: | :----------: | :--------------: |
+| `NO-NIF`        | `127.0.0.0`  | `127.0.0.0:9998` |
 
 - The original description strictly defined that the `Agent Termination`
   command should be encoded in an nmap_job with id = -1. Thus only one 
@@ -143,26 +144,28 @@ each own `pom.xml` file that specifies them.
  	 
 - Supported parameters for dsSA's property file are: 
   (see [/SoftwareAgent/saprop.conf]() for an exapmle )
-    | Key  | Type | Description | 
-    | ---: | :--: | :--------- | 
-    | `AMexists` | true/false | Allows "master-less" execution. |
-    | `AMurl` | ip:port | Points to the Manager host. |
-    | `Jobs File` | /path/to/jobs.file | Read jobs from file instead of AM. |
-    | `Lines per Read` | int | How many job-lines to be imported per atomic read. |
-    | `Pool Size` | int | Count of threads to be pre-spawned to handle one-off jobs. |
-    | `Verbose` | true/false | False means silent. True recommended. |
-    | `RegisterRequestInterval` | int | Seconds between registration requests in case of failure. |
-    | `JobRequestInterval` | int | Seconds between Job requests in case of failure. |
+    
+| Key  | Type | Description | 
+| ---: | :--: | :--------- | 
+| `AMexists` | true/false | Allows "master-less" execution. |
+| `AMurl` | ip:port | Points to the Manager host. |
+| `Jobs File` | /path/to/jobs.file | Read jobs from file instead of AM. |
+| `Lines per Read` | int | How many job-lines to be imported per atomic read. |
+| `Pool Size` | int | Count of threads to be pre-spawned to handle one-off jobs. |
+| `Verbose` | true/false | False means silent. True recommended. |
+| `RegisterRequestInterval` | int | Seconds between registration requests in case of failure. |
+| `JobRequestInterval` | int | Seconds between Job requests in case of failure. |
 
 - Supported parameters for dsAM's property file are: 
   (see [/AggregatorManager/amprop.conf]() for an exapmle )
-    | Key  | Type | Description | 
-    | ---: | :--: | :--------- | 
-    | `DBuser` | string | Database username. |
-    | `DBpass` | string | Database password. |\
-    | `Verbose` | true/false | False means silent. True recommended. |
-    | `RegisterRequestInterval` | int | Seconds between registration requests in case of failure. |
-    | `JobRequestInterval` | int | Seconds between Job requests from Agents |
+    
+| Key  | Type | Description | 
+| ---: | :--: | :--------- | 
+| `DBuser` | string | Database username. |
+| `DBpass` | string | Database password. |
+| `Verbose` | true/false | False means silent. True recommended. |
+| `RegisterRequestInterval` | int | Seconds between registration requests in case of failure. |
+| `JobRequestInterval` | int | Seconds between Job requests from Agents |
 
 ### Credits
 The project was developed by 
