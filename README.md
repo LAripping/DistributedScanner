@@ -84,7 +84,7 @@ While the server module (dsAM) is mandatory, the two clients are not.
 This means that any or no information can be gathered, sent to the 
 server and stored in a MySQL database.
 
-The schema designed is defined in [DSschema.sql](https://raw.github.com/LAripping/NetManager/master/AggregatorManager/DSscript.sql) and a MySQL Workbench Model is available in [DSmodel.mwb](https://raw.github.com/LAripping/NetManager/master/AggregatorManager/DSmodel.mwb).
+The schema designed is defined in [DSschema.sql](https://raw.github.com/LAripping/DistributedScanner/master/AggregatorManager/DSscript.sql) and a MySQL Workbench Model is available in [DSmodel.mwb](https://raw.github.com/LAripping/DistributedScanner/master/AggregatorManager/DSmodel.mwb).
 
 For more info take a look at the __Under the Hood__ section 
 
@@ -143,7 +143,7 @@ each own `pom.xml` file that specifies them.
   recognized as an issue (#1) and awaits a fix.
  	 
 - Supported parameters for dsSA's property file are: 
-  (see [/SoftwareAgent/saprop.conf]() for an exapmle )
+  (see [saprop.conf](https://raw.github.com/LAripping/DistributedScanner/master/SoftwareAgent/saprop.conf) for an exapmle )
     
 | Key  | Type | Description | 
 | ---: | :--: | :--------- | 
@@ -157,7 +157,7 @@ each own `pom.xml` file that specifies them.
 | `JobRequestInterval` | int | Seconds between Job requests in case of failure. |
 
 - Supported parameters for dsAM's property file are: 
-  (see [/AggregatorManager/amprop.conf]() for an exapmle )
+  (see [amprop.conf](https://raw.github.com/LAripping/DistributedScanner/master/AggregatorManager/amprop.conf) for an exapmle )
     
 | Key  | Type | Description | 
 | ---: | :--: | :--------- | 
