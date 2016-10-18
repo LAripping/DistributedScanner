@@ -1,7 +1,7 @@
 
 # Distributed Scanner
 A three-fold application that allows information gathering from deep
-network scans ran by distributed agents. 
+network scans ran by distributed agents.
 Also comes with an Android app for the admin!
 
 
@@ -21,7 +21,7 @@ Also comes with an Android app for the admin!
     ```
 
 * Build and Run  with Maven (install if needed). Default configuration
-  used is described in __Under the Hood__ section. 
+  used is described in __Under the Hood__ section.
   ```bash
      $ sudo apt-get install maven
      $ mvn clean install -DskipTests
@@ -40,30 +40,37 @@ Also comes with an Android app for the admin!
      $ sudo mvn exec:java \
      $  > -Dexec.mainClass='dsSA.softwareAgent.Main'
      $  > -Dexec.args='saprop.conf'  \
-     #sudo used to enable executing more 'sophisticated' nmap commands ;-) 
+     #sudo used to enable executing more 'sophisticated' nmap commands ;-)
    ```
 
 
 ### Quick Start Guide
-After launching the AggregatorManager application the user is presented the GUI.
-Here they can log-in using the admin credentials and make use of the full
-functionality of the dsAM app.
+* Before running the dsAM module, one must use one of the IPv4
+  addresses assigned to the host, and edit the code. Specifically the
+  [corresponding line
+  ](https://github.com/LAripping/DistributedScanner/blob/master/AggregatorManager/src/main/java/dsAM/aggregatorManager/Main.java#L42)
+  must be altered to specify the socket (ip:port) to be used by the
+  server's host.(See Issue #2)
 
-Eventually, exit the application by closing the GUI window -for the dsAM app- 
-and by killing any dsSA apps listening for incoming jobs or waiting to re-execute 
-periodic ones.
+* After launching the AggregatorManager application the user is presented the GUI.
+  Here they can log-in using the admin credentials and make use of the full
+  functionality of the dsAM app.
+
+* Eventually, exit the application by closing the GUI window -for the dsAM app-
+  and by killing any dsSA apps listening for incoming jobs or waiting to re-execute
+  periodic ones.
 
 
 ### Project Structure
 By running the SoftwareAgent module locally, multiple nodes gather
 information for the network, after executing [nmap](https://nmap.org) commands.
-Sets of __nmap jobs__ are assigned to each agent from the *Manager modules, and 
+Sets of __nmap jobs__ are assigned to each agent from the *Manager modules, and
 these in turn receive input from the user. All in all nmap jobs can be defined:
 
 1. Directly, passed as input for the **SoftwareAgent** (or dsSA)
    Java application from a terminal.
 2. Remotely, assigning them a REST API to selected SoftwareAgents
-   that are connected with the **AggregatorManager** (or dsAM) Java application, 
+   that are connected with the **AggregatorManager** (or dsAM) Java application,
    through a GUI.
 3. On the go! Using the **MobileManager** (or dsMM) Android app.
 
@@ -71,22 +78,22 @@ Each agent stores these __nmap jobs__ in a queue and executes them synchronously
 or asynchronoysly, since they take one of two forms:
 
 1. __One-off__ jobs, where the command is executed when it's turn comes.
-   Results are immediately sent to the AggregatorManager and the job 
+   Results are immediately sent to the AggregatorManager and the job
    is poped from the queue.
 2. __Periodic__ jobs, which are first executed in new threads spawned,
-   when their turn comes, so that a timer can be set to re-execute 
+   when their turn comes, so that a timer can be set to re-execute
    independently from the main thread dealing with "one offs".
 
 
 
 ### Data Handling
 While the server module (dsAM) is mandatory, the two clients are not.
-This means that any or no information can be gathered, sent to the 
+This means that any or no information can be gathered, sent to the
 server and stored in a MySQL database.
 
 The schema designed is defined in [DSschema.sql](https://raw.github.com/LAripping/DistributedScanner/master/AggregatorManager/DSscript.sql) and a MySQL Workbench Model is available in [DSmodel.mwb](https://raw.github.com/LAripping/DistributedScanner/master/AggregatorManager/DSmodel.mwb).
 
-For more info take a look at the __Under the Hood__ section 
+For more info take a look at the __Under the Hood__ section
 
 
 ### REST API
@@ -97,17 +104,17 @@ In detail, the services exposed are the following:
 
 
 | Method | URL                          | URL Params      | Body                     |  Description                                                |
-| :----: | :-------------               | :----------     | :-------                 | :------------                                               | 
-| PUT    | <AMurl>`/softwareagent`      |                 | "name\|password"         | Register the Agent in the Manager's Database*.              | 
-| GET    | <AMurl>`/nmapjobs`           |`?hash=<SA_hash>`|                          | Request for NmapJobs from agent, identified by its `hash`**.  | 
-| POST   | <AMurl>`/nmapjobs/<job_id>`  |                 |  "Starting Nmap 6.40..." | Send results from nmap identified by `<job_id>`*.             | 
+| :----: | :-------------               | :----------     | :-------                 | :------------                                               |
+| PUT    | <AMurl>`/softwareagent`      |                 | "name\|password"         | Register the Agent in the Manager's Database*.              |
+| GET    | <AMurl>`/nmapjobs`           |`?hash=<SA_hash>`|                          | Request for NmapJobs from agent, identified by its `hash`**.  |
+| POST   | <AMurl>`/nmapjobs/<job_id>`  |                 |  "Starting Nmap 6.40..." | Send results from nmap identified by `<job_id>`*.             |
 
-  *Returns `200 OK` in success or `400 Bad Request` otherwise, 
+  *Returns `200 OK` in success or `400 Bad Request` otherwise,
   both with an empty response body.
-  
- **Returns a list ( `[<job>,<job>,...]` )  of `toString()`'ed 
- nmap jobs ( `"id.param,periodic,period"` ). 
- 
+
+ **Returns a list ( `[<job>,<job>,...]` )  of `toString()`'ed
+ nmap jobs ( `"id.param,periodic,period"` ).
+
  __NOTE__ that:
 - `Agent Termination` commands and
 - `Periodic Job Halt` commands
@@ -116,7 +123,7 @@ can also be encoded in this format
 
 
 ### Dependencies
-The [Maven](https://maven.apache.org/) tool is used to fetch 
+The [Maven](https://maven.apache.org/) tool is used to fetch
 external Java libraries needed so each project comes with
 each own `pom.xml` file that specifies them.
 
@@ -127,26 +134,26 @@ each own `pom.xml` file that specifies them.
 - Obviously, more than one Agents can run in one node, but
   _only one_  Manager. To avoid duplicate hashes, the generated
   number is XOR'ed with a random number, to maintain large entropy.
-- The SoftwareAgent app can even run __without a NIC__ in the 
-  system host. This case was added for testing purposes in 
+- The SoftwareAgent app can even run __without a NIC__ in the
+  system host. This case was added for testing purposes in
   combination with the fact that this situation arised in development :)
     * If no network interface is found, the SA is registered with
       the following conventions:
-      
+
 | Interface - MAC | Interface IP | AM URL           |
 | :-------------: | :----------: | :--------------: |
 | `NO-NIF`        | `127.0.0.0`  | `127.0.0.0:9998` |
 
 - The original description strictly defined that the `Agent Termination`
-  command should be encoded in an nmap_job with id = -1. Thus only one 
-  of this command can currently be stored in the database. This is 
+  command should be encoded in an nmap_job with id = -1. Thus only one
+  of this command can currently be stored in the database. This is
   recognized as an issue (#1) and awaits a fix.
- 	 
-- Supported parameters for dsSA's property file are: 
+
+- Supported parameters for dsSA's property file are:
   (see [saprop.conf](https://raw.github.com/LAripping/DistributedScanner/master/SoftwareAgent/saprop.conf) for an exapmle )
-    
-| Key  | Type | Description | 
-| ---: | :--: | :--------- | 
+
+| Key  | Type | Description |
+| ---: | :--: | :--------- |
 | `AMexists` | true/false | Allows "master-less" execution. |
 | `AMurl` | ip:port | Points to the Manager host. |
 | `Jobs File` | /path/to/jobs.file | Read jobs from file instead of AM. |
@@ -156,11 +163,11 @@ each own `pom.xml` file that specifies them.
 | `RegisterRequestInterval` | int | Seconds between registration requests in case of failure. |
 | `JobRequestInterval` | int | Seconds between Job requests in case of failure. |
 
-- Supported parameters for dsAM's property file are: 
+- Supported parameters for dsAM's property file are:
   (see [amprop.conf](https://raw.github.com/LAripping/DistributedScanner/master/AggregatorManager/amprop.conf) for an exapmle )
-    
-| Key  | Type | Description | 
-| ---: | :--: | :--------- | 
+
+| Key  | Type | Description |
+| ---: | :--: | :--------- |
 | `DBuser` | string | Database username. |
 | `DBpass` | string | Database password. |
 | `Verbose` | true/false | False means silent. True recommended. |
@@ -168,11 +175,11 @@ each own `pom.xml` file that specifies them.
 | `JobRequestInterval` | int | Seconds between Job requests from Agents |
 
 ### Credits
-The project was developed by 
+The project was developed by
 * Petros Kaltzias
-* Apostolis Kourtogiannis 
+* Apostolis Kourtogiannis
 * Leonidas Tsaousis ( @LAripping )
 
-as a semester-long assignment in the course _Software Development 
-for Networks and Telecommunications_. 	
-				
+as a semester-long assignment in the course _Software Development
+for Networks and Telecommunications_.
+
