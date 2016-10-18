@@ -31,9 +31,6 @@ The last and coolest installment of the __ds*__ ecosystem.
       is destroyed only when the user logs out__ of the application clicking the
       relevant button.
 
- σε επόμενες επανεκκινήσεις, δε θα ζητηθεί απο τον χρήστη να ξανα-εισάγει τα στοιχεία του και θα πλοηγηθέι
- αυτόματα στο κύριο παράθυρο, διατηρώντας έτσι την σύνοδό του (session) μεχρις ότου ηθελήμένα αποσυνδεθεί (logout)
-
 * If the above steps are succesful, the table of registered SoftwareAgents in
   the dsAM node is displayed, each identified by a hash-value, with a dropdown
   listing the available actions. #TODO add screenshot
